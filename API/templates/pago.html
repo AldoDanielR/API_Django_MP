@@ -20,12 +20,12 @@
 
     <script>
         // Configura Mercado Pago con tu clave de prueba
-        const mp = new MercadoPago('TEST-ce88fee7-f01f-454c-ae27-481f8eef7c68', {
+        const mp = new MercadoPago('APP_USR-fad08dc4-80ce-4b7e-9cc9-0425b029ea32', {
             locale: 'es-MX'
         });
         const bricksBuilder = mp.bricks();
     
-        mp.bricks().create("wallet", "checkout-btn", {
+        bricksBuilder.create("wallet", "checkout-btn", {
             initialization: {
                 preferenceId: "{{ PREFERENCE_ID }}",
             },

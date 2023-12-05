@@ -102,6 +102,12 @@ class ForgetPass(APIView):
     
     def get(self, request):
         return render(request,self.template_name)
+    
+class HomeCliente(APIView):
+    template_name="MederyFarma Online.html"
+    
+    def get(self, request):
+        return render(request,self.template_name)
 
 class Chart(APIView):
     template_name="chart.html"
@@ -111,10 +117,10 @@ class Chart(APIView):
     
 class Graficas(APIView):
     template_name="encuesta_chart.html"
-    def post(self,request):
+    def post(self, request):
         return render(request, self.template_name)
     
-    def get(self,request):
+    def get(self, request):
                 pregunta1 = Encuesta.objects.values('frecuencia').annotate(total=Count('frecuencia'))
                 etiquetas1 = [dato['frecuencia'] for dato in pregunta1]
                 valores1 = [dato['total'] for dato in pregunta1]
@@ -177,21 +183,26 @@ class Graficas(APIView):
                     'etiquetas10': etiquetas10,
                     'valores10': valores10,
                 })
-                
-def PagoMP(request):
-    mp = mercadopago.SDK("TEST-7365618180421079-112515-fe16b78fc4ecc2cbf8512550f39660f3-292126273")
 
-    preference_data = {
-        "items": [
-            {
-                "title": "Tempra Gotas",
-                "quantity": 1,
-                "unit_price": 10
-            }
-        ]
-    }
+class PagoMP(APIView):
+    template_name="pago.html"
+    
+    def get(self, request):
+        mp = mercadopago.SDK("APP_USR-7365618180421079-112515-ae2011dc2c3c35e29e0129628fcc313b-292126273")
 
-    preference_response = mp.preference().create(preference_data)
-    preference = preference_response["response"]
+        preference_data = {
+            "items": [
+                {
+                    "id": "0001",
+                    "title": "Tempra Gotas",
+                    "quantity": 1,
+                    "unit_price": 20,
+                    "currency_id": "MXN"
+                }
+            ]
+        }
 
-    return render(request, 'pago.html', {'PREFERENCE_ID': preference['id']})
+        preference_response = mp.preference().create(preference_data)
+        preference = preference_response["response"]
+
+        return render(request, self.template_name, {'PREFERENCE_ID': preference['id']})

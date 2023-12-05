@@ -26,5 +26,6 @@ urlpatterns = [
     path('Home/', Home.as_view(), name="home"),
     path('Dashboard/', Graficas.as_view(), name="dashboard"),
     path('Chart/', Chart.as_view(), name="chart"),
-    path('Pago/', PagoMP, name='pago'),
+    path('Pago/', PagoMP.as_view(), name="pago"),
+    path('HomeCliente/', HomeCliente.as_view(), name="homecliente"),
 ]
