@@ -717,16 +717,28 @@ Sys.WebForms.PageRequestManager._initialize('ctl00$ScriptManager1', 'formulario'
     </div>
 
     <div class="cnt_banners_general_nuevo_diseno">
-
         <div class="slideshow">
-
             <ul class="slider" id="ul_imagenes_banner">
+                <li style="display: none;">
+                    <a><img src="{% static './imagenes/Slider1.png'%}"></a>
+                </li>
+                <li style="display: none;">
+                    <a><img src="{% static './imagenes/Slider2.png'%}"></a>
+                </li>
+                <li style="display: list-item;">
+                    <a><img src="{% static './imagenes/Slider3.png'%}"></a>
+                </li>
+                <li style="display: none;">
+                    <a><img src="{% static './imagenes/Slider4.png'%}"></a>
+                </li>
             </ul>
-
-            <ol class="pagination"><li style="background-color: rgb(177, 179, 179);"></li><li style="background-color: rgb(177, 179, 179);"></li><li style="background-color: var(--azulSecundario);"></li><li style="background-color: rgb(177, 179, 179);"></li></ol>
-
+            <ol class="pagination">
+                <li style="background-color: rgb(177, 179, 179);"></li>
+                <li style="background-color: rgb(177, 179, 179);"></li>
+                <li style="background-color: var(--azulSecundario);"></li>
+                <li style="background-color: rgb(177, 179, 179);"></li>
+            </ol>
         </div>
-
     </div>
 
     <div style="padding: 10px 60px;">
@@ -1053,31 +1065,30 @@ Sys.WebForms.PageRequestManager._initialize('ctl00$ScriptManager1', 'formulario'
         </div>
 
     <script type="text/javascript">
-        fmCrearProducto('BATERAL 20 TAB 80/400 MG', 'TRIMETOPRIMA;SULFAMETOXAZOL;', '7501342800813', 'ANTIBIÓTICO', 'ALLEN', 'ALL103', '231', '$60.00', '80%', '0%', '$12.00', '$12.00', '0%', 1, 'https://visoti.mx/imagenes/Normal/ALL103.webp', 'H', 'IMPULSO');
-        fmCrearProducto('BATERAL 80/400  S/CJA C/20 TAB', 'TRIMETOPRIMA;SULFAMETOXAZOL;', '7501342801056', 'ANTIBIÓTICO', 'ALLEN', 'ALL147', '2408', '$51.00', '80%', '0%', '$10.20', '$10.20', '0%', 2, 'https://visoti.mx/imagenes/Normal/ALL147.webp', 'H', 'IMPULSO');
-        fmCrearProducto('TEMPERAL 10 TAB 500 MG', 'PARACETAMOL;', '7501342800820', 'ANALGÉSICO/ANTIPIRÉTICO', 'ALLEN', 'ALL123', '92477', '$38.00', '80%', '0%', '$7.60', '$7.60', '0%', 3, 'https://visoti.mx/imagenes/Normal/ALL123.webp', 'H', 'IMPULSO');
-        fmCrearProducto('CIDORIX (CLOPIDOGREL) 14 TAB 75 MG', 'CLOPIDOGREL;', '7502209850620', 'ANTICOAGULANTE', 'SOLARA', 'SOL023', '319', '$105.00', '80%', '0%', '$21.00', '$21.00', '0%', 4, 'https://visoti.mx/imagenes/Normal/SOL023.webp', 'H', 'IMPULSO');
-        fmCrearProducto('FIBROXOL 30 TAB 200 MG', 'BEZAFIBRATO;', '7502209851221', 'HIPERLIPIDEMIA / HIPERCOLESTEROLEMIA', 'SOLARA', 'SOL017', '1446', '$108.00', '80%', '0%', '$21.60', '$21.60', '0%', 5, 'https://visoti.mx/imagenes/Normal/SOL017.webp', 'H', 'IMPULSO');
-        fmCrearProducto('ACIDO ACETILSALICILICO 30 TAB 100MG', 'ACIDO ACETILSALICILICO;', '7501342803524', 'ANTIINFLAMATORIO', 'BE ADVANCE', 'BEA364', '550', '$123.20', '80%', '44.44%', '$24.64', '$13.69', '0%', 6, 'https://visoti.mx/imagenes/Normal/BEA364.webp', 'H', 'IMPULSO');
-        fmCrearProducto('AMBROXOL 20 TAB 30 MG', 'AMBROXOL;', '7501342804361', 'EXPECTORANTE', 'BE ADVANCE', 'BEA412', '11341', '$80.00', '80%', '50.00%', '$16.00', '$8.00', '0%', 7, 'https://visoti.mx/imagenes/Normal/BEA412.webp', 'H', 'IMPULSO');
-        fmCrearProducto('AMLODIPINO 10 TAB 5 MG', 'AMLODIPINO;', '7502209850279', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA340', '818', '$19.20', '80%', '0%', '$3.84', '$3.84', '0%', 8, 'https://visoti.mx/imagenes/Normal/BEA340.webp', 'H', 'IMPULSO');
-        fmCrearProducto('AMLODIPINO 100 TAB 5 MG', 'AMLODIPINO;', '7501342803630', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA351', '597', '$582.05', '80%', '73.68%', '$116.41', '$30.64', '0%', 9, 'https://visoti.mx/imagenes/Normal/BEA351.webp', 'H', 'IMPULSO');
-        fmCrearProducto('AMLODIPINO 30 TAB 5 MG', 'AMLODIPINO;', '7502209850286', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA341', '1587', '$45.00', '80%', '0%', '$9.00', '$9.00', '0%', 10, 'https://visoti.mx/imagenes/Normal/BEA341.webp', 'H', 'IMPULSO');
-        fmCrearProducto('BEZAFIBRATO 30 TAB 200 MG', 'BEZAFIBRATO;', '7501342802046', 'HIPERLIPIDEMIA / HIPERCOLESTEROLEMIA', 'BE ADVANCE', 'BEA214', '4138', '$171.84', '80%', '33.33%', '$34.37', '$22.91', '0%', 11, 'https://visoti.mx/imagenes/Normal/BEA214.webp', 'H', 'IMPULSO');
-        fmCrearProducto('BUTILHIOSCINA 10 TAB 10 MG', 'BROMURO DE BUTILHIOSCINA;', '7501342804323', 'ANTIESPASMÓDICO', 'BE ADVANCE', 'BEA417', '5840', '$125.00', '80%', '41.18%', '$25.00', '$14.71', '0%', 12, 'https://visoti.mx/imagenes/Normal/BEA417.webp', 'H', 'IMPULSO');
-        fmCrearProducto('CAPTOPRIL 100 TAB 25 MG', 'CAPTOPRIL;', '7501342803937', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA352', '510', '$159.74', '80%', '16.66%', '$31.95', '$26.63', '0%', 13, 'https://visoti.mx/imagenes/Normal/BEA352.webp', 'H', 'IMPULSO');
-        fmCrearProducto('CAPTOPRIL 30 TAB 25 MG', 'CAPTOPRIL;', '7501342802077', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA404', '1944', '$69.00', '80%', '47.37%', '$13.80', '$7.26', '0%', 14, 'https://visoti.mx/imagenes/Normal/BEA404.webp', 'H', 'IMPULSO');
-        fmCrearProducto('CELECOXIB 10 CAPS 200MG', 'CELECOXIB;', '7501342803692', 'ANTIINFLAMATORIO', 'BE ADVANCE', 'BEA366', '698', '$731.34', '80%', '61.53%', '$146.27', '$56.27', '0%', 15, 'https://visoti.mx/imagenes/Normal/BEA366.webp', 'H', 'IMPULSO');
-        fmCrearProducto('CINITAPRIDA 25 COMP 1 MG', 'CINITAPRIDA;', '7501342803661', 'MOTILIDAD INTESTINAL / REFLUJO', 'BE ADVANCE', 'BEA353', '170', '$343.84', '80%', '58.33%', '$68.77', '$28.66', '0%', 16, 'https://visoti.mx/imagenes/Normal/BEA353.webp', 'H', 'IMPULSO');
-        fmCrearProducto('CIPROFLOXACINO 12 TAB 500 MG', 'CIPROFLOXACINO;', '7501342802091', 'ANTIBIÓTICO', 'BE ADVANCE', 'BEA405', '2695', '$160.00', '80%', '47.37%', '$32.00', '$16.84', '0%', 17, 'https://visoti.mx/imagenes/Normal/BEA405.webp', 'H', 'IMPULSO');
-        fmCrearProducto('CIPROFLOXACINO 8 TAB 250 MG', 'CIPROFLOXACINO;', '7501342802084', 'ANTIBIÓTICO', 'BE ADVANCE', 'BEA221', '1493', '$84.45', '80%', '28.57%', '$16.89', '$12.06', '0%', 18, 'https://visoti.mx/imagenes/Normal/BEA221.webp', 'H', 'IMPULSO');
-        fmCrearProducto('CLINDAMICINA 16 CAPS 300 MG', 'CLINDAMICINA;', '7501342802121', 'ANTIBIÓTICO', 'BE ADVANCE', 'BEA213', '2974', '$564.57', '80%', '58.33%', '$112.91', '$47.05', '0%', 19, 'https://visoti.mx/imagenes/Normal/BEA213.webp', 'H', 'IMPULSO');
-        fmCrearProducto('CLOPIDOGREL 14 TAB 75MG', 'CLOPIDOGREL;', '7501342803654', 'ANTICOAGULANTE', 'BE ADVANCE', 'BEA373', '442', '$1168.04', '80%', '77.78%', '$233.61', '$51.91', '0%', 20, 'https://visoti.mx/imagenes/Normal/BEA373.webp', 'H', 'IMPULSO');
+        fmCrearProducto('BATERAL 20 TAB 80/400 MG', 'TRIMETOPRIMA;SULFAMETOXAZOL;', '7501342800813', 'ANTIBIÓTICO', 'ALLEN', 'ALL103', '231', '$60.00', '80%', '0%', '$12.00', '$12.00', '0%', 1, '{% static './imagenes/ALL103.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('BATERAL 80/400  S/CJA C/20 TAB', 'TRIMETOPRIMA;SULFAMETOXAZOL;', '7501342801056', 'ANTIBIÓTICO', 'ALLEN', 'ALL147', '2408', '$51.00', '80%', '0%', '$10.20', '$10.20', '0%', 2, '{% static './imagenes/ALL147.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('TEMPERAL 10 TAB 500 MG', 'PARACETAMOL;', '7501342800820', 'ANALGÉSICO/ANTIPIRÉTICO', 'ALLEN', 'ALL123', '92477', '$38.00', '80%', '0%', '$7.60', '$7.60', '0%', 3, '{% static './imagenes/ALL123.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('CIDORIX (CLOPIDOGREL) 14 TAB 75 MG', 'CLOPIDOGREL;', '7502209850620', 'ANTICOAGULANTE', 'SOLARA', 'SOL023', '319', '$105.00', '80%', '0%', '$21.00', '$21.00', '0%', 4, '{% static './imagenes/SOL023.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('FIBROXOL 30 TAB 200 MG', 'BEZAFIBRATO;', '7502209851221', 'HIPERLIPIDEMIA / HIPERCOLESTEROLEMIA', 'SOLARA', 'SOL017', '1446', '$108.00', '80%', '0%', '$21.60', '$21.60', '0%', 5, '{% static './imagenes/SOL017.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('ACIDO ACETILSALICILICO 30 TAB 100MG', 'ACIDO ACETILSALICILICO;', '7501342803524', 'ANTIINFLAMATORIO', 'BE ADVANCE', 'BEA364', '550', '$123.20', '80%', '44.44%', '$24.64', '$13.69', '0%', 6, '{% static './imagenes/BEA364.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('AMBROXOL 20 TAB 30 MG', 'AMBROXOL;', '7501342804361', 'EXPECTORANTE', 'BE ADVANCE', 'BEA412', '11341', '$80.00', '80%', '50.00%', '$16.00', '$8.00', '0%', 7, '{% static './imagenes/BEA412.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('AMLODIPINO 10 TAB 5 MG', 'AMLODIPINO;', '7502209850279', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA340', '818', '$19.20', '80%', '0%', '$3.84', '$3.84', '0%', 8, '{% static './imagenes/BEA340.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('AMLODIPINO 100 TAB 5 MG', 'AMLODIPINO;', '7501342803630', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA351', '597', '$582.05', '80%', '73.68%', '$116.41', '$30.64', '0%', 9, '{% static './imagenes/BEA351.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('AMLODIPINO 30 TAB 5 MG', 'AMLODIPINO;', '7502209850286', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA341', '1587', '$45.00', '80%', '0%', '$9.00', '$9.00', '0%', 10, '{% static './imagenes/BEA341.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('BEZAFIBRATO 30 TAB 200 MG', 'BEZAFIBRATO;', '7501342802046', 'HIPERLIPIDEMIA / HIPERCOLESTEROLEMIA', 'BE ADVANCE', 'BEA214', '4138', '$171.84', '80%', '33.33%', '$34.37', '$22.91', '0%', 11, '{% static './imagenes/BEA214.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('BUTILHIOSCINA 10 TAB 10 MG', 'BROMURO DE BUTILHIOSCINA;', '7501342804323', 'ANTIESPASMÓDICO', 'BE ADVANCE', 'BEA417', '5840', '$125.00', '80%', '41.18%', '$25.00', '$14.71', '0%', 12, '{% static './imagenes/BEA417.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('CAPTOPRIL 100 TAB 25 MG', 'CAPTOPRIL;', '7501342803937', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA352', '510', '$159.74', '80%', '16.66%', '$31.95', '$26.63', '0%', 13, '{% static './imagenes/BEA352.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('CAPTOPRIL 30 TAB 25 MG', 'CAPTOPRIL;', '7501342802077', 'ANTIHIPERTENSIVO', 'BE ADVANCE', 'BEA404', '1944', '$69.00', '80%', '47.37%', '$13.80', '$7.26', '0%', 14, '{% static './imagenes/BEA404.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('CELECOXIB 10 CAPS 200MG', 'CELECOXIB;', '7501342803692', 'ANTIINFLAMATORIO', 'BE ADVANCE', 'BEA366', '698', '$731.34', '80%', '61.53%', '$146.27', '$56.27', '0%', 15, '{% static './imagenes/BEA366.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('CINITAPRIDA 25 COMP 1 MG', 'CINITAPRIDA;', '7501342803661', 'MOTILIDAD INTESTINAL / REFLUJO', 'BE ADVANCE', 'BEA353', '170', '$343.84', '80%', '58.33%', '$68.77', '$28.66', '0%', 16, '{% static './imagenes/BEA353.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('CIPROFLOXACINO 12 TAB 500 MG', 'CIPROFLOXACINO;', '7501342802091', 'ANTIBIÓTICO', 'BE ADVANCE', 'BEA405', '2695', '$160.00', '80%', '47.37%', '$32.00', '$16.84', '0%', 17, '{% static './imagenes/BEA405.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('CIPROFLOXACINO 8 TAB 250 MG', 'CIPROFLOXACINO;', '7501342802084', 'ANTIBIÓTICO', 'BE ADVANCE', 'BEA221', '1493', '$84.45', '80%', '28.57%', '$16.89', '$12.06', '0%', 18, '{% static './imagenes/BEA221.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('CLINDAMICINA 16 CAPS 300 MG', 'CLINDAMICINA;', '7501342802121', 'ANTIBIÓTICO', 'BE ADVANCE', 'BEA213', '2974', '$564.57', '80%', '58.33%', '$112.91', '$47.05', '0%', 19, '{% static './imagenes/BEA213.webp'%}', 'H', 'IMPULSO');
+        fmCrearProducto('CLOPIDOGREL 14 TAB 75MG', 'CLOPIDOGREL;', '7501342803654', 'ANTICOAGULANTE', 'BE ADVANCE', 'BEA373', '442', '$1168.04', '80%', '77.78%', '$233.61', '$51.91', '0%', 20, '{% static './imagenes/BEA373.webp'%}', 'H', 'IMPULSO');
     </script>
         
     <script>
-        agregar_imagenes_slider('1A.png', ''); agregar_imagenes_slider('2A.png', ''); agregar_imagenes_slider('3A.jpg', '');
-        agregar_imagenes_slider('4A.png', ''); animar_slider();agregar_imagenes_slider_pie('1B.png', '');
+        animar_slider();
     </script>
     
     <script type="text/javascript">
