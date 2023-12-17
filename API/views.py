@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
@@ -16,18 +16,32 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 from django.db.models import Count
 from .models import Encuesta
 from django.conf import settings
 import mercadopago
 
-class Login(LoginView):
-    template_name= 'login.html'
-    fields = '__all__'
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            if user.is_staff:
+                login(request, user)
+                messages.success(request, 'Bienvenido Administrador.')
+                return redirect('home')
+            else:
+                login(request, user)
+                messages.error(request, 'Bienvenido Cliente.')
+                return redirect('mederyfarma')
+        else:
+            messages.error(request, 'Nombre de usuario o contraseña incorrectos.')
 
-    def get_success_url(self):
-        return reverse_lazy('home')
+    return render(request, 'login.html')
 
 
 class RegisterView(FormView):
@@ -95,7 +109,8 @@ class Home(LoginRequiredMixin, ListView):
     template_name="index.html"
     
     def get(self, request):
-        return render(request,self.template_name)
+        username = request.user.username
+        return render(request,self.template_name, {'username': username})
 
 class ForgetPass(APIView):
     template_name="forget-pass.html"
@@ -103,19 +118,26 @@ class ForgetPass(APIView):
     def get(self, request):
         return render(request,self.template_name)
     
-class HomeCliente(APIView):
+class MederyFarma(LoginRequiredMixin, ListView):
     template_name="MederyFarma Online.html"
+    
+    def get(self, request):
+        username = request.user.username
+        return render(request,self.template_name, {'username': username})
+
+class Carrito(LoginRequiredMixin, ListView):
+    template_name="Carrito.html"
     
     def get(self, request):
         return render(request,self.template_name)
 
-class Chart(APIView):
+class Chart(LoginRequiredMixin, ListView):
     template_name="chart.html"
     
     def get(self, request):
         return render(request,self.template_name)
     
-class Graficas(APIView):
+class Graficas(LoginRequiredMixin, ListView):
     template_name="encuesta_chart.html"
     def post(self, request):
         return render(request, self.template_name)
@@ -184,7 +206,7 @@ class Graficas(APIView):
                     'valores10': valores10,
                 })
 
-class PagoMP(APIView):
+class PagoMP(LoginRequiredMixin, ListView):
     template_name="pago.html"
     
     def get(self, request):

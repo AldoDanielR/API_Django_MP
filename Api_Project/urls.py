@@ -19,7 +19,7 @@ from API.views import *
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
-    path('',Login.as_view(),name="login"),
+    path('', login_view, name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name="logout"),
     path('Register/',RegisterView.as_view(),name="register"),
     path('Forget/',ForgetPass.as_view(),name="forget"),
@@ -27,5 +27,6 @@ urlpatterns = [
     path('Dashboard/', Graficas.as_view(), name="dashboard"),
     path('Chart/', Chart.as_view(), name="chart"),
     path('Pago/', PagoMP.as_view(), name="pago"),
-    path('HomeCliente/', HomeCliente.as_view(), name="homecliente"),
+    path('MederyFarma/', MederyFarma.as_view(), name="mederyfarma"),
+    path('Carrito/', Carrito.as_view(), name="carrito"),
 ]

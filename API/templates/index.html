@@ -84,7 +84,7 @@
                                 <i class="fas fa-table"></i>Tables</a>
                         </li>
                         <li>
-                            <a href="{% url 'homecliente' %}">
+                            <a href="{% url 'mederyfarma' %}">
                                 <i class="far fa-check-square"></i>Forms</a>
                         </li>
                         <li>
@@ -188,7 +188,7 @@
                                 <i class="fas fa-table"></i>Tables</a>
                         </li>
                         <li>
-                            <a href="{% url 'homecliente' %}">
+                            <a href="{% url 'mederyfarma' %}">
                                 <i class="far fa-check-square"></i>Forms</a>
                         </li>
                         <li>
@@ -387,7 +387,7 @@
                                             <img src="{% static 'images/icon/avatar-01.jpg'%}" alt="John Doe" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">john doe</a>
+                                            <a class="js-acc-btn" href="#">{{ username }}</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
@@ -398,9 +398,9 @@
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">john doe</a>
+                                                        <a href="#">{{ username }}</a>
                                                     </h5>
-                                                    <span class="email">johndoe@example.com</span>
+                                                    <span class="email">{{ request.user.email }}</span>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__body">
