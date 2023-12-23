@@ -1,0 +1,659 @@
+{% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Levic Online</title>
+        <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+        <meta name="application-name" content="Ventas">
+        <meta name="msapplication-tooltip" content="Abrir sitio en él explorador">
+        <meta name="msapplication-navbutton-color" content="#0072ce">
+
+        <link rel="icon" href="{% static './imagenes/circulo_ico.png'%}">
+        <link href="{% static './css/jquery-ui.css'%}" rel="stylesheet">
+        <link href="{% static './css/jquery-ui.min.css'%}" rel="stylesheet">
+        <link href="{% static './css/ventaLevic.css'%}" rel="stylesheet" type="text/css">
+        <link href="{% static './css/sweetalert.css'%}" rel="stylesheet" type="text/css">
+        <link href="{% static './css/SliderBanner.css'%}" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="{% static './js/jquery-2.2.2.min.js'%}"></script>
+        <script type="text/javascript" src="{% static './js/ventaLevic.js'%}"></script>
+        <script type="text/javascript" src="{% static './js/sweetalert.min.js'%}"></script>
+        <script type="text/javascript" src="{% static './js/main3.js'%}"></script>
+
+        <script type="text/javascript" src="{% static './js/FuncionesSignalR.js'%}"></script>
+
+        <style type="text/css">
+            .img_iconos_cliente {
+                float: right;
+                width: 25px;
+            }
+
+            .img_flechas_laboratorios {
+                width: 60px;
+                border-radius: 50%;
+                transition: all.3s;
+            }
+
+                .img_flechas_laboratorios:hover {
+                    background-color: rgba(0, 0, 0, .16);
+                }
+
+            .img_flechas_laboratorios_ocultas {
+                display: none;
+                float: right;
+                margin-top: -6px;
+                width: 25px;
+            }
+
+            /* these styles are for the demo, but are not required for the plugin */
+            .zoom {
+                display: inline-block;
+                position: relative;
+            }
+
+                /* magnifying glass icon */
+                .zoom:after {
+                    content: '';
+                    display: block;
+                    width: 33px;
+                    height: 33px;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    background: url(icon.png);
+                }
+
+                .zoom img {
+                    display: block;
+                }
+
+                    .zoom img::selection {
+                        background-color: transparent;
+                    }
+
+            #ex2 img:hover {
+                cursor: url(grab.cur), default;
+            }
+
+            #ex2 img:active {
+                cursor: url(grabbed.cur), default;
+            }
+
+            .cnt_banners_general_nuevo_diseno {
+                width: 100%;
+                margin-top: -22px;
+                margin-left: -40px;
+                margin-bottom: 40px;
+                box-sizing: border-box;
+            }
+
+            .cnt_popup_publicidad {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 9;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, .36);
+            }
+
+            .cnt_popup_publicidad_interno {
+                background-color: #fff;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 9;
+                width: 80%;
+                max-height: 90%;
+                text-align: center;
+                margin-left: 50%;
+                transform: translateX(-50%);
+                margin-top: 100px;
+                border-radius: 10px;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            @media (max-width: 600px) {
+
+                .cnt_menu_datos {
+                    top: 30px;
+                    right: 50%;
+                }
+
+                    .cnt_menu_datos:hover {
+                        width: 75%;
+                        top: 40px;
+                        right: 25%;
+                    }
+
+                .btn_logo_busqueda {
+                    display: none;
+                }
+
+                .cnt_encabezado_txt_busqueda {
+                    margin-left: 0px;
+                }
+
+                .cnt_encabezado_redes_datos {
+                    grid-template-columns: 1fr;
+                }
+
+                .cnt_encabezado_datos_datos {
+                    display: none;
+                }
+
+                .cnt_encabezado_datos {
+                    grid-template-columns: repeat(2, 1fr);
+                    text-align: center;
+                }
+
+                .cnt_banners_general_nuevo_diseno {
+                    margin-top: 30px;
+                }
+
+                .div_carritoProductos .margenProductos {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    padding-right: 0px;
+                    margin-left: 25px;
+                }
+
+                .disponible_productoCarrito {
+                    position: initial;
+                }
+
+                .precios_productoCarrito {
+                    min-width: 0px;
+                }
+
+                .botones_productoCarrito {
+                    position: absolute;
+                    left: -85%;
+                    top: 10px;
+                }
+
+                .mensajeOfertaNuevo_2 {
+                    padding: 5px;
+                    width: 55%;
+                    margin-left: 50%;
+                    transform: translateX(-50%);
+                }
+
+                .cnt_producto_detalle {
+                    grid-template-columns: 100%;
+                }
+
+                .cnt_oferta_producto_detalle {
+                    padding: 5px 20px;
+                    margin-left: 65%;
+                }
+
+                .img_producto_detalle {
+                    width: 60%;
+                    margin-bottom: 30px;
+                }
+
+                .slideshow {
+                    margin-top: 50px;
+                }
+            }
+        </style>
+    </head>
+    
+<body style="height: 619px;">
+    <form method="post" action="#" id="formulario">
+    <div class="aspNetHidden">
+        <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+        <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+        <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="tg0V8be4JM4huivUpCSpcZUI/CShV+xmWgmw6ToRUhPxMM9+2PBiOF617Ys/h8Y6eLRNVtyREQl8bcmAdu7ajDUG9q8tAkkRW9pZo6bxxLmN4xjU6xoghlxB5MO8VlVLJoO74wfOg8Rg6kKWity3VXU2J6yxV1LTlRDYCOFxIfGqRF8r6xEgmVJV4QQZQyzYXwArWZVrbmauCYmH0Wl+83aG/dxx0nF/zYAy8tYULVUV+slHimV5tP04DEq6x01QY+TSB4VEXPzjjPm1YKBcAA==">
+    </div>
+
+<div class="aspNetHidden">
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="A4258880">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="LE/KdqW3wnO3O+pwjmp7fOOM3Zub1bMU9Ry8h4+93hgY/PyKLylQuZVyLg5Fgajp/5/TVoVIIbjNjEq8pCHFet5FYETGA+CMK1VNM6WM8nDEgJqpVup6ytwNi7u8wg/gtH3m0fQyPoLp3edxMufA6vMyA2J0xlqVCQuZFtx3qOAYoKUOVLWIpCHD5wddlKLHePqJOycEXs079Mqp4474Lkjx4jJlo+yYP1S20S52Tx8WJ7LGiPazAcnFq/U8tr4LtwAL9xgPbf8N2NLRwwu/SEIWhcLAStZk2qCMSMZNVo8P5Ri0w+6EAMkBwMqfPsdFVNHeLqhphM3KAN/KkbLYX6NlZVopq1MZVowL5DFTwTlHR+bzrwPH1/gD5cARJG2sonaGmYe+xgihiTV6qyBlcGOvwBF55WzLZYijkXmhi4EW+pDc6i29Y6g5p0l+wlKwMgLDVfZmqbnBrYGuII2oUn4ATEgFgPVPtcIVynpVP4bkIJ9BwCJIq9INiXL6RmZ+mkSAovxaqGjPkwrhOLLOtU3Ck2IwtkRAyh9AE/VpqAOsb7B3qos04ZkdwQMV1Tmdi/1pz5kpzdiUDp2e+nj6ayyd2MIhPfnI2GfOmAGg+6iBORsFKb9Bu00bQ+HBRxrv6H9jyWcKR5/5NRnQXGU5++t5JjubmccTChYou8OcyWphXS3JxA1pFifg+uNwjCwT+8cXPqVXY4X1piMN0ei/0oaMKvVBjls82JNolkU0lu1cu5je++AptCg4xojTZYWM0/LmDa0Fuicj9z+vafux94Ht6+glQhUu/s5Y7cQ3sB2J5vFwcybhid5OwkgA4XfrvSV7bDetdmo4wn6DXqEqV0PtPznCunu/KtrlyGOImdU=">
+</div>
+
+        <input type="hidden" name="ctl00$hf_ofertas" id="hf_ofertas">
+        <input type="hidden" name="ctl00$hf_nuevos_productos" id="hf_nuevos_productos">
+        <input type="hidden" name="ctl00$hf_generico" id="hf_generico">
+        <input type="hidden" name="ctl00$hf_patente" id="hf_patente">
+        <input type="hidden" name="ctl00$hf_herbolario" id="hf_herbolario">
+        <input type="hidden" name="ctl00$hf_curacion" id="hf_curacion">
+        <input type="hidden" name="ctl00$hf_higiene" id="hf_higiene">
+        <input type="hidden" name="ctl00$hf_arribos" id="hf_arribos">
+        <input type="hidden" name="ctl00$hf_laboratorio" id="hf_laboratorio">
+        <input type="hidden" name="ctl00$hf_arrayLaboratorios" id="hf_arrayLaboratorios">
+        <input type="hidden" name="ctl00$hf_num_productos" id="hf_num_productos">
+        <input type="hidden" name="ctl00$hf_laboratorio_checked" id="hf_laboratorio_checked">
+
+        <input type="hidden" name="ctl00$hf_busqueda_laboratorios" id="hf_busqueda_laboratorios" value="">
+
+        <input type="hidden" name="ctl00$hf_id_zoom_imagen" id="hf_id_zoom_imagen">
+
+        <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ScriptManager1', 'formulario', [], [], [], 90, 'ctl00');
+//]]>
+</script>
+
+
+        
+
+        <div id="div_contenedorEncabezado" class="cnt_encabezado_nuevo_diseno">
+
+            <div class="cnt_encabezado_redes_datos">
+
+                <div class="cnt_encabezado_redes">
+
+                    <div class="cnt_encabezado_redes_redes">
+                        <a id="btn_fb" href="https://www.facebook.com/circulodelasaludmx/" target="_blank" class="btn_encabezado_redes">
+                            <img src="{% static './imagenes/facebook.png'%}" style="margin-right: 5px;"></a>
+
+                        <a id="btn_ins" href="https://www.instagram.com/circulodelasalud/" target="_blank" class="btn_encabezado_redes">
+                            <img src="{% static './imagenes/instagram.png'%}" style="margin-right: 5px;"></a>
+
+                        <a id="btn_tw" href="https://twitter.com/CirculodlaSalud" target="_blank" class="btn_encabezado_redes">
+                            <img src="{% static './imagenes/twiter.png'%}" style="margin-right: 5px;"></a>
+
+                        <a id="btn_tw" href="https://www.youtube.com/@CirculodelaSalud" target="_blank" class="btn_encabezado_redes">
+                            <img src="{% static './imagenes/youtube.png'%}" style="margin-right: 5px;"></a>
+                    </div>
+
+                </div>
+                <div class="cnt_encabezado_datos">
+
+                    <div>
+
+                        <a id="a_usuario" class="btn_encabezado_nombre">HOLA, {{ username }}</a>
+                        <img id="img_usuario_abajo" src="{% static './imagenes/usuario.png'%}" class="img_encabezado_nombre">
+
+                    </div>
+                    <div class="cnt_encabezado_datos_datos">
+
+                        <div>
+                            <span id="lbl_razon_encabezado">RAMIREZ BARAJAS ALDO DANIEL</span>
+                            <br>
+                            <span id="status_encabezado" style="float: right; font-weight: bold;" class="cnt_estatus_cuenta_activo"></span>
+                            <span id="lbl_no_cliente_encabezado">Cliente: 267625</span>
+                            <br>
+                            <br>
+                            <label>Credito disponible</label><span id="credito_encabezado" style="float: right;">$ 47,565.83</span>
+                            <br>
+                            <label>Limite de crédito</label><span id="limite_credito_encabezado" style="float: right;">$ 50,000.00</span>
+                        </div>
+
+                    </div>
+                    <div class="cnt_encabezado_datos_total">
+
+                        <span id="sp_numProductos">0</span>
+                        <a id="a_carrito" onclick="fnMostrarCarrito();" href="{% url 'carrito' %}">
+                            <img id="img_carrito_nuevo" src="{% static './imagenes/carrito.png'%}" style="width: 35px; margin: 0px 7px; cursor: pointer;">
+
+                        </a>
+                        <label id="sp_totalCarrito">Total $0.00</label>
+
+
+                        
+                        
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="cnt_encabezado_busqueda">
+
+                <a id="a_logo" class="btn_logo_busqueda" href="{% url 'mederyfarma' %}">
+                    <img src="{% static './imagenes/logocirculo.png'%}">
+                </a>
+                <div id="cnt_encabezado_busqueda" class="cnt_encabezado_txt_busqueda">
+                    <input name="q" type="text" id="tb_buscar" placeholder="Buscar productos" value="{{ query }}">
+                    <button type="submit" class="icone-search a_search"></button>
+                </div>
+                <a class="icone-menu btn_menu_filtros_icono"></a>
+
+                
+            </div>
+
+        </div>
+
+        <div id="cnt_menu_datos" class="cnt_menu_datos">
+
+            <div class="cnt_menu_datos_interno">
+
+                <div class="cnt_cabecera_menu">
+
+                    <div>
+                        <img src="{% static './imagenes/icono_cliente.png'%}">
+                        <span id="nombre" class="cnt_cabecera_menu_span">HOLA, {{ username }}</span>
+                    </div>
+                    <div>
+                        <span id="lbl_razon_menu">ALDO</span>
+                        <br>
+                        <span id="lbl_no_cuenta_menu">Cliente: 267625</span>
+                        <br>
+                        <br>
+                        <label>Cred. Disp.</label><span id="credito" style="float: right;">$ 47,565.83</span>
+                        <br>
+                        <label>Lim. Cred.</label><span id="limite_credito" style="float: right;">$ 50,000.00</span>
+                        <br>
+                        <br>
+                        <span id="status" class="statusActivo">ACTIVO</span>
+                    </div>
+
+                </div>
+                <div class="cnt_modulos_menu">
+
+                    <div>
+                        <a href="#">
+                            <img id="Image1" src="{% static './imagenes/usuariocuenta.png'%}">
+                        </a>
+                        <a class="btn_menu_cliente" href="#">Datos de cuenta</a>
+                    </div>
+                    <div>
+                        <a href="#">
+                            <img id="Image4" src="{% static './imagenes/pedidos.png'%}">
+                        </a>
+                        <a class="btn_menu_cliente" href="#">Pedidos y facturas</a>
+                    </div>
+                    <div>
+                        <a href="#">
+                            <img id="Image2" src="{% static './imagenes/preguntas.png'%}">
+                        </a>
+                        <a class="btn_menu_cliente" href="#">Preguntas frecuentes</a>
+                    </div>
+                    <div>
+                        <a href="#">
+                            <img id="Image5" src="{% static './imagenes/reportapago.png'%}">
+                        </a>
+                        <a class="btn_menu_cliente">Reporta tu pago</a>
+                    </div>
+                    <div>
+                        <a href="#">
+                            <img id="Image6" src="{% static './imagenes/descargacatalogo.png'%}">
+                        </a>
+                        <a class="btn_menu_cliente" href="#">Descarga catalogo</a>
+                    </div>
+                    <div>
+                        <a onclick="fnMostrarCarrito();" href="{% url 'carrito' %}">
+                            <img id="Image7" src="{% static './imagenes/carritoazulmenu.png'%}">
+                        </a>
+                        <a class="btn_menu_cliente" onclick="fnMostrarCarrito();" href="{% url 'carrito' %}">Carrito de compra</a>
+                    </div>
+                    <div>
+                        <a onclick="borrar_carrito_sr();">
+                            <img id="Image8" src="{% static './imagenes/borrarcarrito.png'%}">
+                        </a>
+                        <a onclick="borrar_carrito_sr();" class="btn_menu_cliente">Borrar carrito</a>
+                    </div>
+                    <div>
+                        <a href="{% url 'logout' %}">
+                            <img id="Image3" src="{% static './imagenes/cerrarsesion.png'%}">
+                        </a>
+                        <a id="a_login_" class="btn_menu_cliente" href="{% url 'logout' %}">Cerrar sesión</a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="pagina">
+
+            <div id="principal" style="margin-top: 40px;">
+
+                <input type="hidden" name="ctl00$Cliente" id="Cliente" value="0000267625">
+                <input type="hidden" name="ctl00$Pedido" id="Pedido" value="">
+                <input type="hidden" name="ctl00$NumeroProductos" id="NumeroProductos" value="0">
+                <input type="hidden" name="ctl00$TotalCarrito" id="TotalCarrito">
+                <input type="hidden" name="ctl00$IVA" id="IVA">
+                <input type="hidden" name="ctl00$Bloqueo" id="Bloqueo">
+                <input type="hidden" name="ctl00$Web_Vendedor" id="Web_Vendedor" value="B17">
+                <input type="hidden" name="ctl00$Nombre" id="Nombre" value="ALDO DANIEL RAMIREZ BARAJAS">
+                <input type="hidden" name="ctl00$Aviso" id="Aviso">
+                <input type="hidden" name="ctl00$Credito" id="Credito" value="$ 47565.83">
+                <input type="hidden" name="ctl00$Limite_credito" id="Limite_credito" value="$ 50000.00">
+                <input type="hidden" name="ctl00$MensajeBloqueo" id="MensajeBloqueo">
+                <input type="hidden" name="ctl00$PedidoCorreo" id="PedidoCorreo">
+                <input type="hidden" name="ctl00$PedidoMensaje" id="PedidoMensaje">
+                <input type="hidden" name="ctl00$MenuSeleccionado" id="MenuSeleccionado">
+                <input type="hidden" name="ctl00$Test" id="Test">
+                <input type="hidden" name="ctl00$accionMenu" id="accionMenu">
+
+                <div id="cnt_filtros_catalogo" class="cnt_filtros_catalogo">
+
+                    <div class="cnt_filtros_catalogo_interno">
+
+                        <div id="logoLevicOnline" class="cnt_logo_filtros">
+                            <a class="icone-LvOnline logo_login" href="#"></a>
+                            
+                        </div>
+
+                        <a id="btn_todos_productos" class="btn_filtros" style="display: none; color: transparent;" onclick="fnBloquear();" href="#">Productos encontrados
+                        <span id="lbl_num_productos" style="float: right; color: transparent;">0</span></a>
+
+                        <div class="cnt_botones_filtros">
+                            <div>
+                                <a onclick="activar_generico();">
+                                    <img id="img_generico_normal" class="img_flechas_laboratorios" src="{% static './imagenes/impulsofiltros.png'%}">
+                                    <img id="img_generico_seleccionado" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/impulsofiltrosazul.png'%}">
+                                </a>
+                                <a class="btn_filtros" onclick="activar_generico();">Impulso</a>
+                            </div>
+                            <div>
+                                <a onclick="activar_patente();">
+                                    <img id="img_patente_normal" class="img_flechas_laboratorios" src="{% static './imagenes/marcasfiltros.png'%}">
+                                    <img id="img_patente_seleccionado" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/marcasfiltrosazul.png'%}">
+                                </a>
+                                <a class="btn_filtros" onclick="activar_patente();">Marcas</a>
+                            </div>
+                            <div>
+                                <a onclick="activar_herbolario();">
+                                    <img id="img_herbolario_normal" class="img_flechas_laboratorios" src="{% static './imagenes/herbolariofiltros.png'%}">
+                                    <img id="img_herbolario_seleccionado" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/herbolariofiltrosazul.png'%}">
+                                </a>
+                                <a class="btn_filtros" onclick="activar_herbolario();">Naturista</a>
+                            </div>
+                            <div>
+                                <a onclick="activar_curacion();">
+                                    <img id="img_curacion_normal" class="img_flechas_laboratorios" src="{% static './imagenes/curacionfiltros.png'%}">
+                                    <img id="img_curacion_seleccionado" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/curacionfiltrosazul.png'%}">
+                                </a>
+                                <a class="btn_filtros" onclick="activar_curacion();">M. curación</a>
+                            </div>
+                            <div>
+                                <a onclick="activar_higiene();">
+                                    <img id="img_higiene_normal" class="img_flechas_laboratorios" src="{% static './imagenes/higienefiltros.png'%}">
+                                    <img id="img_higiene_seleccionado" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/higienefiltrosazul.png'%}">
+                                </a>
+                                <a class="btn_filtros" onclick="activar_higiene();">Higiene</a>
+                            </div>
+                            <div>
+                                <a onclick="activar_ofertas();">
+                                    <img id="img_ofertas_normal" class="img_flechas_laboratorios" src="{% static './imagenes/ofertasfiltros.png'%}">
+                                    <img id="img_ofertas_seleccionado" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/ofertasfiltrosazul.png'%}">
+                                </a>
+                                <a id="btn_ofertas" class="btn_filtros" onclick="activar_ofertas();">Ofertas</a>
+                            </div>
+                            <div>
+                                <a onclick="activar_nuevos_productos();">
+                                    <img id="img_nuevos_normal" class="img_flechas_laboratorios" src="{% static './imagenes/nuevosfiltros.png'%}">
+                                    <img id="img_nuevos_seleccionado" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/nuevosfiltrosazul.png'%}">
+                                </a>
+                                <a id="btn_nuevos_productos" class="btn_filtros" onclick="activar_nuevos_productos();">Nuevos</a>
+                            </div>
+                            <div>
+                                <a onclick="activar_arribos();">
+                                    <img id="img_arribos_normal" class="img_flechas_laboratorios" src="{% static './imagenes/arribosfiltros.png'%}">
+                                    <img id="img_arribos_seleccionado" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/arribosfiltrosazul.png'%}">
+                                </a>
+                                <a id="btn_arribos_productos" class="btn_filtros" onclick="activar_arribos();">Arribos de hoy</a>
+                            </div>
+                            <div>
+                                <a href="#">
+                                    <img id="Image150" class="img_flechas_laboratorios" src="{% static './imagenes/todosfiltros.png'%}">
+                                    <img id="Image160" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/todosfiltrosazul.png'%}">
+                                </a>
+                                <a id="btn_todo_productos" class="btn_filtros" href="#">Todos</a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <a id="btn_laboratorios" class="btn_laboratorios_filtros" onclick="muestra_oculta_contenedores_filtros(&#39;ul_laboratorio&#39;);">
+                                <img id="img_laboratorios_abajo" class="img_flechas_laboratorios" src="{% static './imagenes/flecha-abajo-gris.png'%}">
+                                <img id="img_laboratorios_arriba" class="img_flechas_laboratorios_ocultas" src="{% static './imagenes/flecha-arriba-gris.png'%}">
+                                Laboratorio</a>
+                            <h1 id="h1_filtros" style="float: right; margin-right: 15px; margin-top: -3px; font-weight: bold; box-sizing: border-box;">Filtros</h1>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                
+
+    <a id="Contenedor_a_mostarCarrito" class="botonOculto" href="javascript:__doPostBack(&#39;ctl00$Contenedor$a_mostarCarrito&#39;,&#39;&#39;)"></a>
+    <a id="Contenedor_a_buscar" class="botonOculto" href="javascript:__doPostBack(&#39;ctl00$Contenedor$a_buscar&#39;,&#39;&#39;)"></a>
+
+    <div style="width: 100%; margin-top: -20px; margin-left: -40px; margin-bottom: 40px; box-sizing: border-box;">
+
+        <div class="slideshow">
+
+            <ul class="slider" id="ul_imagenes_banner">
+            </ul>
+
+            <ol class="pagination">
+            </ol>
+
+        </div>
+
+    </div>
+    <div class="cnt_producto_detalle">
+        <div>
+            <img id="img_clasificacion_detalle" class="img_clasificacion_detalle" src="{% static './imagenes/farma.png' %}">
+            <label id="lbl_laboratorio_producto_detalle" class="cnt_laboratorio_producto_detalle">{{ producto.laboratorio }}</label>
+            <img class="img_producto_detalle" src="{{ producto.imagen.url }}">
+        </div>
+        <div>
+            <div>
+                <label id="lbl_existencia_producto_detalle" class="lbl_codigo_producto_detalle" style="font-size: 16px;">{{ producto.cantidad_stock }} pzas</label>
+                <br>
+                <br>
+                <label id="lbl_nombre_producto_detalle" style="font-weight: bold; color: #333;">{{ producto.nombre }}</label>
+                <br>
+                <label id="lbl_sustancia_producto_detalle">{{ producto.sustancia }}</label>
+                <br>
+                <label id="lbl_indice_producto_detalle">{{ producto.indicacion }}</label>
+            </div>
+            <div class="cnt_precios_producto_detalle">
+                <div>
+                    <span class="spn_resaltar" title="Precio unitario">Precio</span>
+                    <br>
+                    <span id="lbl_preFin{{ producto.id_producto }}">$ {{ producto.precio }}</span>
+                </div>
+                <div>
+                    <span class="spn_resaltar">SubTotal</span>
+                    <br>
+                    <span id="lbl_subTotal{{ producto.id_producto }}">$ 0.00</span>
+                </div>
+            </div>
+            <div class="cnt_cantidad_producto_detalle">
+                <div>
+                    <a class="icone-remove a_aumentarDisminuir" style="cursor: pointer;" title="Dismunuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                    <input name="tb_cantidad" type="text" id="tb_cantidad{{ producto.id_producto }}" class="tb_cantidadProductoCatalogo" value="0" onkeyup="fnCambiarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')">
+                    <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                </div>
+                <a id="btn_agregar_producto_detalle" class="btn_agregar_producto_detalle">AGREGAR</a>
+            </div>
+            <div class="cnt_codigo_barras_producto_detalle">
+                <label>Código de barras</label>
+                <label id="lbl_codigobarras_producto_detalle" class="lbl_codigo_barras_producto_detalle">{{ producto.id_producto }}</label>
+            </div>
+        </div>
+    </div>
+    
+
+    <h2 style="text-align: center; color: red;">Productos de interés</h2>
+    <hr style="width: 80%; margin-left: 50%; transform: translateX(-50%);">
+
+    <div id="cnt_productos_relacionados" class="cnt_productos_relacionados" style="display: flex; padding-bottom: 40px; width: 80%; overflow: auto; margin-left: 50%; transform: translateX(-50%); justify-content: center; box-sizing: border-box;">
+        {% for producto in productos %}
+            <div class="div_productoCatalogo">
+                <img class="img_clasificacion" src="{% static './imagenes/farma.png'%}">
+                <span class="lbl_piezas_existencia">{{ producto.cantidad_stock }} pzs</span>
+                <div class="div_imagenProductoCatalogo">
+                    <a href="{% url 'detalle_producto' producto.id_producto %}">
+                        <img src="{{ producto.imagen.url }}" title="Ver detalles">
+                    </a>
+                </div>
+                <div class="cnt_nombre_tarjeta_producto">
+                    <div class="div_2Renglones">
+                        <span class="spn_nombreProductoCatalogo" title="Nombre">{{ producto.nombre }}</span>
+                    </div>
+                    <div class="div_2Renglones">
+                        <span class="spn_sustenciaActivaProductoCatalogo" title="Sustancia activa">{{ producto.sustancia }}</span>
+                    </div>
+                    <span class="spn_indiceTerapeuticoProductoCatalogo" title="Indice terapeutico">{{ producto.indicacion }}</span>
+                    <span class="spn_laboratorioProductoCatalogo" title="Laboratorio">{{ producto.laboratorio }}</span>
+                </div>
+                <div class="div_exintenciaProductoCatalogo">
+                    <div class="div_exintenciaProductoCatalogoDiv"></div>
+                </div>
+                <div class="div_grupoPrecios3">
+                    <div>
+                        <span class="spn_resaltar" title="Precio unitario">Precio</span>
+                        <span id="lbl_preFin{{ producto.id_producto }}">$ {{ producto.precio }}</span>
+                    </div>
+                    <div>
+                        <span class="spn_resaltar">SubTotal</span>
+                        <span id="lbl_subTotal{{ producto.id_producto }}">$ 0.00</span>
+                    </div>
+                </div>
+                <div class="div_cantidadAgregarProductoCatalogo">
+                    <div class="div_cantidadAgregarProductoCatalogoDiv">
+                        <div class="div_cantidadProductoCatalogo">
+                            <a class="icone-remove a_aumentarDisminuir" style="cursor: pointer;" title="Dismunuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                            <input name="tb_cantidad" type="text" id="tb_cantidad{{ producto.id_producto }}" class="tb_cantidadProductoCatalogo" value="0" onkeyup="fnCambiarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')">
+                            <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                        </div>
+                    </div>
+                    <div class="div_cantidadAgregarProductoCatalogoDiv">
+                        <a id="a_agregar{{ producto.id_producto }}" class="btn_agregar_carrito_disponible" title="Agregar" onclick="fnAgregarProducto('#lbl_codigo{{ producto.id_producto }}','#tb_cantidad{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','#lbl_iva{{ producto.id_producto }}',this)">AGREGAR</a>
+                    </div>
+                </div>
+                <div class="cnt_codigo_barras_tarjeta_producto">
+                    <label>Código de Barras</label><br>
+                    <label style="font-weight: bold;">{{ producto.id_producto }}</label>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="cnt_scroll_div items">
+    </div>
+
+
+            </div>
+
+        </div>
+        <div id="piePagina" class="piePagina" style="width: 1349px;">
+            <div>
+                <span style="color: #DDD">© Copyright 2022 Levic | Todos los derechos reservados</span>
+            </div>
+        </div>
+
+    
+</form>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-121098824-1');
+    </script>
+
+</body></html>

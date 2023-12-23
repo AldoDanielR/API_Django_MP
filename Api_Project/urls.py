@@ -29,4 +29,5 @@ urlpatterns = [
     path('Pago/', PagoMP.as_view(), name="pago"),
     path('MederyFarma/', MederyFarma.as_view(), name="mederyfarma"),
     path('Carrito/', Carrito.as_view(), name="carrito"),
+    path('Detalle_Producto/<int:producto_id>/', Detalle_Producto.as_view(), name="detalle_producto"),
 ]

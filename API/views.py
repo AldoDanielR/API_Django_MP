@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 
@@ -18,7 +18,8 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
 from django.contrib.auth import authenticate, login
 from django.db.models import Count
-from .models import Encuesta
+from .models import Encuesta, Producto
+from random import sample
 from django.conf import settings
 import mercadopago
 
@@ -119,12 +120,36 @@ class ForgetPass(APIView):
         return render(request,self.template_name)
     
 class MederyFarma(LoginRequiredMixin, ListView):
-    template_name="MederyFarma Online.html"
-    
+    template_name = "MederyFarma Online.html"
+    model = Producto
+    context_object_name = 'productos'
+
     def get(self, request):
         username = request.user.username
-        return render(request,self.template_name, {'username': username})
+        query = request.GET.get('q', '')
+        if query:
+            productos = Producto.objects.filter(nombre__icontains=query) | Producto.objects.filter(sustancia__icontains=query)
+        else:
+            all_productos = Producto.objects.all()
+            productos = sample(list(all_productos), min(15, len(all_productos)))
 
+        query = ''
+
+        context = {'username': username, 'productos': productos, 'query': query}
+        return render(request, self.template_name, context)
+    
+class Detalle_Producto(LoginRequiredMixin, ListView):
+    template_name = "Detalle_Producto.html"
+
+    def get(self, request, producto_id):
+        username = request.user.username
+        producto = get_object_or_404(Producto, id_producto=producto_id)
+
+        productos_relacionados = Producto.objects.filter(sustancia=producto.sustancia).exclude(id_producto=producto.id_producto).order_by('?')[:3]
+
+        context = {'username': username, 'producto': producto, 'productos': productos_relacionados}
+        return render(request, self.template_name, context)
+    
 class Carrito(LoginRequiredMixin, ListView):
     template_name="Carrito.html"
     
