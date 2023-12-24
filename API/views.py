@@ -139,7 +139,7 @@ class MederyFarma(LoginRequiredMixin, ListView):
         return render(request, self.template_name, context)
     
 class Detalle_Producto(LoginRequiredMixin, ListView):
-    template_name = "Detalle_Producto.html"
+    template_name = "detalle_producto.html"
 
     def get(self, request, producto_id):
         username = request.user.username
