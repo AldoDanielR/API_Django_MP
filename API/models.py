@@ -30,25 +30,32 @@ class Producto(models.Model):
     class Meta:
         db_table = 'producto'
         
-class Venta(models.Model):
-    id_venta = models.IntegerField(primary_key=True, db_column='id_venta')
-    fecha = models.DateTimeField(auto_now_add=True, db_column='fecha')
-    productos = models.ManyToManyField(Producto, through='Detalle_Venta')
+class Carrito(models.Model):
+    id_carrito = models.AutoField(primary_key=True, db_column='id_carrito')
     usuario_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='usuario_id')
+    productos = models.ManyToManyField(Producto, through='Detalle_Carrito')
+    class Meta:
+        db_table = 'carrito'
+
+class Detalle_Carrito(models.Model):
+    id_detalle_carrito = models.AutoField(primary_key=True, db_column='id_detalle_carrito')
+    cantidad = models.IntegerField(db_column='cantidad')
+    id_carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, db_column='id_carrito')
+    id_producto = models.ForeignKey(Producto, on_delete=models.CASCADE, db_column='id_producto')
+    class Meta:
+        db_table = 'detalle_carrito'
+        
+class Venta(models.Model):
+    id_venta = models.AutoField(primary_key=True, db_column='id_venta')
+    fecha = models.DateTimeField(auto_now_add=True, db_column='fecha')
+    id_carrito = models.OneToOneField(Carrito, on_delete=models.CASCADE, db_column='id_carrito')
     class Meta:
         db_table = 'venta'
 
 class Ticket(models.Model):
-    id_ticket = models.IntegerField(primary_key=True, db_column='id_ticket')
+    id_ticket = models.AutoField(primary_key=True, db_column='id_ticket')
     total = models.DecimalField(max_digits=10, decimal_places=2, db_column='total')
     id_venta = models.OneToOneField(Venta, on_delete=models.CASCADE, db_column='id_venta')
     class Meta:
         db_table = 'ticket'
 
-class Detalle_Venta(models.Model):
-    id_detalle_venta = models.IntegerField(primary_key=True, db_column='id_detalle_venta')
-    cantidad = models.IntegerField(db_column='cantidad')
-    id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE, db_column='id_venta')
-    id_producto = models.ForeignKey(Producto, on_delete=models.CASCADE, db_column='id_producto')
-    class Meta:
-        db_table = 'detalle_venta'

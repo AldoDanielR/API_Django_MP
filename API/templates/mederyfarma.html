@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>MederyFarma Online</title>
+        <title>MederyFarma Online</title>  
         <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
         <meta name="application-name" content="Ventas">
         <meta name="msapplication-tooltip" content="Abrir sitio en él explorador">
@@ -15,13 +15,18 @@
         <link href="{% static './css/ventaLevic.css'%}" rel="stylesheet" type="text/css">
         <link href="{% static './css/sweetalert.css'%}" rel="stylesheet" type="text/css">
         <link href="{% static './css/SliderBanner.css'%}" rel="stylesheet" type="text/css">
+        <link href="{% static './css/mederyfarma.css'%}" rel="stylesheet" type="text/css">
 
         <script type="text/javascript" src="{% static './js/jquery-2.2.2.min.js'%}"></script>
         <script type="text/javascript" src="{% static './js/ventaLevic.js'%}"></script>
         <script type="text/javascript" src="{% static './js/sweetalert.min.js'%}"></script>
         <script type="text/javascript" src="{% static './js/main3.js'%}"></script>
 
+        <script type="text/javascript" src="{% static './js/jquery.zoom.js'%}"></script>
         <script type="text/javascript" src="{% static './js/FuncionesSignalR.js'%}"></script>
+        <script type="text/javascript" src="{% static './js/carrito.js'%}"></script>
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
     
     <body style="height: 619px;">
@@ -74,6 +79,12 @@
                 <a id="a_logo" class="btn_logo_busqueda" href="{% url 'mederyfarma' %}">
                     <img src="{% static './imagenes/logocirculo.png'%}">
                 </a>
+                <form method="get" action="{% url 'mederyfarma' %}">
+                    <div id="cnt_encabezado_busqueda" class="cnt_encabezado_txt_busqueda">
+                        <input name="q" type="text" id="tb_buscar" placeholder="Buscar productos" value="{{ query }}">
+                        <button type="submit" class="icone-search a_search"></button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -124,54 +135,34 @@
 
         <div id="pagina">
             <div id="principal" style="margin-top: 40px;">
-                <div class="cnt_producto_detalle">
-                    <div>
-                        <img id="img_clasificacion_detalle" class="img_clasificacion_detalle" src="{% static './imagenes/farma.png' %}">
-                        <label id="lbl_laboratorio_producto_detalle" class="cnt_laboratorio_producto_detalle">{{ producto.laboratorio }}</label>
-                        <img class="img_producto_detalle" src="{{ producto.imagen.url }}">
-                    </div>
-                    <div>
-                        <div>
-                            <label id="lbl_existencia_producto_detalle" class="lbl_codigo_producto_detalle" style="font-size: 16px;">{{ producto.cantidad_stock }} pzas</label>
-                            <br>
-                            <br>
-                            <label id="lbl_nombre_producto_detalle" style="font-weight: bold; color: #333;">{{ producto.nombre }}</label>
-                            <br>
-                            <label id="lbl_sustancia_producto_detalle">{{ producto.sustancia }}</label>
-                            <br>
-                            <label id="lbl_indice_producto_detalle">{{ producto.indicacion }}</label>
-                        </div>
-                        <div class="cnt_precios_producto_detalle">
-                            <div>
-                                <span class="spn_resaltar" title="Precio unitario">Precio</span>
-                                <br>
-                                <span id="lbl_preFin{{ producto.id_producto }}">$ {{ producto.precio }}</span>
-                            </div>
-                            <div>
-                                <span class="spn_resaltar">SubTotal</span>
-                                <br>
-                                <span id="lbl_subTotal{{ producto.id_producto }}">$ 0.00</span>
-                            </div>
-                        </div>
-                        <div class="cnt_cantidad_producto_detalle">
-                            <div>
-                                <a class="icone-remove a_aumentarDisminuir" style="cursor: pointer;" title="Dismunuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
-                                <input name="tb_cantidad" type="text" id="tb_cantidad{{ producto.id_producto }}" class="tb_cantidadProductoCatalogo" value="0" onkeyup="fnCambiarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')">
-                                <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
-                            </div>
-                            <a id="btn_agregar_producto_detalle" class="btn_agregar_producto_detalle">AGREGAR</a>
-                        </div>
-                        <div class="cnt_codigo_barras_producto_detalle">
-                            <label>Código de barras</label>
-                            <label id="lbl_codigobarras_producto_detalle" class="lbl_codigo_barras_producto_detalle">{{ producto.id_producto }}</label>
-                        </div>
+                <a id="Contenedor_a_buscar" class="botonOculto" href="javascript:__doPostBack(&#39;ctl00$Contenedor$a_buscar&#39;,&#39;&#39;)"></a>
+                <a id="Contenedor_a_mostarCarrito" class="botonOculto" href="javascript:__doPostBack(&#39;ctl00$Contenedor$a_mostarCarrito&#39;,&#39;&#39;)"></a>
+                <a id="Contenedor_a_enviarPedidoCorreo" class="botonOculto" href="javascript:__doPostBack(&#39;ctl00$Contenedor$a_enviarPedidoCorreo&#39;,&#39;&#39;)"></a>
+                <div class="cnt_banners_general_nuevo_diseno">
+                    <div class="slideshow">
+                        <ul class="slider" id="ul_imagenes_banner">
+                            <li style="display: none;">
+                                <a><img src="{% static './imagenes/Slider1.png'%}"></a>
+                            </li>
+                            <li style="display: none;">
+                                <a><img src="{% static './imagenes/Slider2.png'%}"></a>
+                            </li>
+                            <li style="display: list-item;">
+                                <a><img src="{% static './imagenes/Slider3.png'%}"></a>
+                            </li>
+                            <li style="display: none;">
+                                <a><img src="{% static './imagenes/Slider4.png'%}"></a>
+                            </li>
+                        </ul>
+                        <ol class="pagination">
+                            <li style="background-color: rgb(177, 179, 179);"></li>
+                            <li style="background-color: rgb(177, 179, 179);"></li>
+                            <li style="background-color: var(--azulSecundario);"></li>
+                            <li style="background-color: rgb(177, 179, 179);"></li>
+                        </ol>
                     </div>
                 </div>
-                
-                <h1 style="text-align: center; color: red;">Productos de interés</h1>
-                <hr style="width: 80%; margin-left: 50%; transform: translateX(-50%);">
-                
-                <div id="cnt_productos_relacionados" class="cnt_productos_relacionados" style="display: flex; padding-bottom: 40px; width: 80%; overflow: auto; margin-left: 50%; transform: translateX(-50%); justify-content: center; box-sizing: border-box;">
+                <div id="div_catalogoProductos" style="margin-left: 134.5px;">
                     {% for producto in productos %}
                     <div class="div_productoCatalogo">
                         <img class="img_clasificacion" src="{% static './imagenes/farma.png'%}">
@@ -213,7 +204,7 @@
                                 </div>
                             </div>
                             <div class="div_cantidadAgregarProductoCatalogoDiv">
-                                <a id="a_agregar{{ producto.id_producto }}" class="btn_agregar_carrito_disponible" title="Agregar" onclick="fnAgregarProducto('#lbl_codigo{{ producto.id_producto }}','#tb_cantidad{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','#lbl_iva{{ producto.id_producto }}',this)">AGREGAR</a>
+                                <a id="btn_agregar{{ producto.id_producto }}" class="btn_agregar_carrito_disponible" title="Agregar" onclick="fnAgregarProducto('{{ producto.id_producto }}')">AGREGAR</a>
                             </div>
                         </div>
                         <div class="cnt_codigo_barras_tarjeta_producto">
@@ -223,6 +214,19 @@
                     </div>
                     {% endfor %}
                 </div>
+                <div style="padding: 40px 40px 70px 40px; box-sizing: border-box;">
+                    <hr style="float: left; width: 45%;">
+                    <img src="{% static './imagenes/circulo.jpg'%}" style="float: left; width: 50px; margin-left: 3.4%; margin-top: -20px; box-sizing: border-box;">
+                    <hr style="float: right; width: 45%;">
+                </div>
+                <div id="cnt_banners_pie" class="cnt_scroll_div items">
+                    <div class="cnt_scroll_div_item">
+                        <img src="{% static './imagenes/Publicidad.jpg'%}">
+                    </div>
+                    <div class="cnt_scroll_div_item">
+                        <img src="{% static './imagenes/Publicidad2.jpg'%}">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -231,6 +235,10 @@
                 <span style="color: #DDD">© Copyright MederyFarma | Todos los derechos reservados</span>
             </div>
         </div>
+        
+        <script>
+            animar_slider();
+        </script>
     
     </body>
 </html>

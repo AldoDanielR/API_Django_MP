@@ -18,9 +18,9 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
 from django.contrib.auth import authenticate, login
 from django.db.models import Count
-from .models import Encuesta, Producto
-from random import sample
+from .models import *
 from django.conf import settings
+import random
 import mercadopago
 
 def login_view(request):
@@ -120,7 +120,7 @@ class ForgetPass(APIView):
         return render(request,self.template_name)
     
 class MederyFarma(LoginRequiredMixin, ListView):
-    template_name = "MederyFarma Online.html"
+    template_name = "mederyfarma.html"
     model = Producto
     context_object_name = 'productos'
 
@@ -131,7 +131,7 @@ class MederyFarma(LoginRequiredMixin, ListView):
             productos = Producto.objects.filter(nombre__icontains=query) | Producto.objects.filter(sustancia__icontains=query)
         else:
             all_productos = Producto.objects.all()
-            productos = sample(list(all_productos), min(15, len(all_productos)))
+            productos = random.sample(list(all_productos), min(15, len(all_productos)))
 
         query = ''
 
@@ -151,10 +151,14 @@ class Detalle_Producto(LoginRequiredMixin, ListView):
         return render(request, self.template_name, context)
     
 class Carrito(LoginRequiredMixin, ListView):
-    template_name="Carrito.html"
+    template_name="carrito.html"
     
     def get(self, request):
-        return render(request,self.template_name)
+        username = request.user.username
+        productos = Producto.objects.all()
+        productos_aleatorios = random.sample(list(productos), min(4, len(productos)))
+
+        return render(request, self.template_name, {'username': username, 'productos': productos_aleatorios})
 
 class Chart(LoginRequiredMixin, ListView):
     template_name="chart.html"
