@@ -24,7 +24,6 @@
 
         <script type="text/javascript" src="{% static './js/jquery.zoom.js'%}"></script>
         <script type="text/javascript" src="{% static './js/FuncionesSignalR.js'%}"></script>
-        <script type="text/javascript" src="{% static './js/carrito.js'%}"></script>
 
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
@@ -67,11 +66,11 @@
                         </div>
                     </div>
                     <div class="cnt_encabezado_datos_total">
-                        <span id="sp_numProductos">0</span>
-                        <a id="a_carrito" onclick="fnMostrarCarrito();" href="{% url 'carrito' %}">
+                        <span id="sp_numProductos">{{ articulos }}</span>
+                        <a id="a_carrito" href="{% url 'carrito' %}">
                             <img id="img_carrito_nuevo" src="{% static './imagenes/carrito.png'%}" style="width: 35px; margin: 0px 7px; cursor: pointer;">
                         </a>
-                        <label id="sp_totalCarrito">Total $0.00</label>
+                        <label id="sp_totalCarrito">Total: ${{ total }}</label>
                     </div>
                 </div>
             </div>
@@ -195,18 +194,21 @@
                                 <span id="lbl_subTotal{{ producto.id_producto }}">$ 0.00</span>
                             </div>
                         </div>
-                        <div class="div_cantidadAgregarProductoCatalogo">
-                            <div class="div_cantidadAgregarProductoCatalogoDiv">
-                                <div class="div_cantidadProductoCatalogo">
-                                    <a class="icone-remove a_aumentarDisminuir" style="cursor: pointer;" title="Dismunuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
-                                    <input name="tb_cantidad" type="text" id="tb_cantidad{{ producto.id_producto }}" class="tb_cantidadProductoCatalogo" value="0" onkeyup="fnCambiarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')">
-                                    <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                        <form method="post" action="{% url 'agregar_al_carrito' producto.id_producto %}">
+                            {% csrf_token %}
+                            <div class="div_cantidadAgregarProductoCatalogo">
+                                <div class="div_cantidadAgregarProductoCatalogoDiv">
+                                    <div class="div_cantidadProductoCatalogo">
+                                        <a class="icone-remove a_aumentarDisminuir" style="cursor: pointer;" title="Dismunuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}')"></a>
+                                        <input name="cantidad" type="text" id="tb_cantidad{{ producto.id_producto }}" class="tb_cantidadProductoCatalogo" value="0">
+                                        <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}')"></a>
+                                    </div>
+                                </div>
+                                <div class="div_cantidadAgregarProductoCatalogoDiv">
+                                    <button type="submit" class="btn_agregar_carrito_disponible" title="Agregar">AGREGAR</button>
                                 </div>
                             </div>
-                            <div class="div_cantidadAgregarProductoCatalogoDiv">
-                                <a id="btn_agregar{{ producto.id_producto }}" class="btn_agregar_carrito_disponible" title="Agregar" onclick="fnAgregarProducto('{{ producto.id_producto }}')">AGREGAR</a>
-                            </div>
-                        </div>
+                        </form>                        
                         <div class="cnt_codigo_barras_tarjeta_producto">
                             <label>Código de Barras</label><br>
                             <label style="font-weight: bold;">{{ producto.id_producto }}</label>

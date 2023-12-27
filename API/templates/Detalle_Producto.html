@@ -62,11 +62,11 @@
                         </div>
                     </div>
                     <div class="cnt_encabezado_datos_total">
-                        <span id="sp_numProductos">0</span>
-                        <a id="a_carrito" onclick="fnMostrarCarrito();" href="{% url 'carrito' %}">
+                        <span id="sp_numProductos">{{ articulos }}</span>
+                        <a id="a_carrito" href="{% url 'carrito' %}">
                             <img id="img_carrito_nuevo" src="{% static './imagenes/carrito.png'%}" style="width: 35px; margin: 0px 7px; cursor: pointer;">
                         </a>
-                        <label id="sp_totalCarrito">Total $0.00</label>
+                        <label id="sp_totalCarrito">Total: ${{ total }}</label>
                     </div>
                 </div>
             </div>

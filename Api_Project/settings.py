@@ -38,6 +38,7 @@ if RENDER_EXTERNAL_HOSTNAME:
 INSTALLED_APPS = [
     'API',
     'rest_framework',
+    'sweetify', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -139,6 +140,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 # Configuración para el correo electrónico con Gmail
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

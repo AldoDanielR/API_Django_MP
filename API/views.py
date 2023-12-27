@@ -11,13 +11,16 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
+from django.http import HttpResponseBadRequest
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.db.models import Count
+from sweetify import sweetify
 from .models import *
 from django.conf import settings
 import random
@@ -134,8 +137,29 @@ class MederyFarma(LoginRequiredMixin, ListView):
             productos = random.sample(list(all_productos), min(15, len(all_productos)))
 
         query = ''
+        
+        carrito, created = Carrito.objects.get_or_create(id_usuario=request.user)
+        detalles = Detalle_Carrito.objects.filter(id_carrito=carrito)
 
-        context = {'username': username, 'productos': productos, 'query': query}
+        total = 0
+
+        for detalle in detalles:
+            subtotal = detalle.id_producto.precio * detalle.cantidad
+            detalle.subtotal = subtotal
+            detalle.save()
+            total += subtotal
+            
+        articulos = Detalle_Carrito.objects.filter(id_carrito=carrito).values('id_producto').distinct().count()
+
+
+        context = {
+            'username': username,
+            'productos': productos,
+            'total': total,
+            'articulos': articulos,
+            'query': query
+        }
+        
         return render(request, self.template_name, context)
     
 class Detalle_Producto(LoginRequiredMixin, ListView):
@@ -146,19 +170,61 @@ class Detalle_Producto(LoginRequiredMixin, ListView):
         producto = get_object_or_404(Producto, id_producto=producto_id)
 
         productos_relacionados = Producto.objects.filter(sustancia=producto.sustancia).exclude(id_producto=producto.id_producto).order_by('?')[:3]
+        
+        carrito, created = Carrito.objects.get_or_create(id_usuario=request.user)
+        detalles = Detalle_Carrito.objects.filter(id_carrito=carrito)
 
-        context = {'username': username, 'producto': producto, 'productos': productos_relacionados}
+        total = 0
+
+        for detalle in detalles:
+            subtotal = detalle.id_producto.precio * detalle.cantidad
+            detalle.subtotal = subtotal
+            detalle.save()
+            total += subtotal
+            
+        articulos = Detalle_Carrito.objects.filter(id_carrito=carrito).values('id_producto').distinct().count()
+
+        context = {
+            'username': username,
+            'producto': producto,
+            'total': total,
+            'articulos': articulos,
+            'productos': productos_relacionados
+        }
+        
         return render(request, self.template_name, context)
     
-class Carrito(LoginRequiredMixin, ListView):
+class Ver_Carrito(LoginRequiredMixin, ListView):
     template_name="carrito.html"
     
     def get(self, request):
         username = request.user.username
         productos = Producto.objects.all()
         productos_aleatorios = random.sample(list(productos), min(4, len(productos)))
+        
+        carrito, created = Carrito.objects.get_or_create(id_usuario=request.user)
+        detalles = Detalle_Carrito.objects.filter(id_carrito=carrito)
 
-        return render(request, self.template_name, {'username': username, 'productos': productos_aleatorios})
+        total = 0
+
+        for detalle in detalles:
+            subtotal = detalle.id_producto.precio * detalle.cantidad
+            detalle.subtotal = subtotal
+            detalle.save()
+            total += subtotal
+            
+        articulos = Detalle_Carrito.objects.filter(id_carrito=carrito).values('id_producto').distinct().count()
+
+        contexto = {
+            'username': username,
+            'productos': productos_aleatorios,
+            'detalles': detalles,
+            'total': total,
+            'articulos': articulos,
+            'titulo': 'Carrito de Compras'
+        }
+
+        return render(request, self.template_name, contexto)
 
 class Chart(LoginRequiredMixin, ListView):
     template_name="chart.html"
@@ -257,3 +323,30 @@ class PagoMP(LoginRequiredMixin, ListView):
         preference = preference_response["response"]
 
         return render(request, self.template_name, {'PREFERENCE_ID': preference['id']})
+    
+def agregar_al_carrito(request, producto_id):
+    producto = get_object_or_404(Producto, id_producto=producto_id)
+
+    if request.method == 'POST':
+        cantidad = int(request.POST.get('cantidad', 1))
+
+        if cantidad > producto.cantidad_stock:
+            sweetify.warning(request, f'No hay suficiente stock de {producto.nombre}. Solo hay {producto.cantidad_stock} en stock.')
+            return redirect('mederyfarma')
+
+        if cantidad > 0:
+            carrito, created = Carrito.objects.get_or_create(id_usuario=request.user)
+
+            detalle_carrito, created = Detalle_Carrito.objects.get_or_create(
+                id_producto=producto,
+                id_carrito=carrito,
+            )
+
+            detalle_carrito.cantidad += cantidad
+            detalle_carrito.save()
+
+            sweetify.success(request, 'El producto ha sido añadido al carrito.')
+
+            return redirect('carrito')
+
+    return HttpResponseBadRequest("Bad Request")

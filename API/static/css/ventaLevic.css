@@ -1265,6 +1265,7 @@ nav {
     box-sizing: border-box;
     font-size: .9em;
     border-radius: 50px;
+    border: none;
 }
 
 .btn_agregar_carrito_no_disponible {

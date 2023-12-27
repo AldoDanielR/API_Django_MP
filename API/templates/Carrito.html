@@ -63,11 +63,11 @@
                         </div>
                     </div>
                     <div class="cnt_encabezado_datos_total">
-                        <span id="sp_numProductos">0</span>
-                        <a id="a_carrito" onclick="fnMostrarCarrito();">
+                        <span id="sp_numProductos">{{ articulos }}</span>
+                        <a id="a_carrito" href="{% url 'carrito' %}">
                             <img id="img_carrito_nuevo" src="{% static './imagenes/carrito.png'%}" style="width: 35px; margin: 0px 7px; cursor: pointer;">
                         </a>
-                        <label id="sp_totalCarrito">Total $0.00</label>
+                        <label id="sp_totalCarrito">Total: ${{ total }}</label>
                     </div>
                 </div>
             </div>
@@ -75,10 +75,6 @@
                 <a id="a_logo" class="btn_logo_busqueda" href="{% url 'mederyfarma' %}">
                     <img src="{% static './imagenes/logocirculo.png'%}">
                 </a>
-                <div id="cnt_encabezado_busqueda" class="cnt_encabezado_txt_busqueda">
-                    <input name="ctl00$tb_buscar" type="text" id="tb_buscar" placeholder="Buscar productos">
-                    <a id="a_buscar1M" class="icone-search a_search" onclick="fnBuscar();"></a>
-                </div>
             </div>
         </div>
 
@@ -133,51 +129,58 @@
                     <img src="{% static './imagenes/carritoazul.png'%}">
                     <h1>Carrito de compra</h1>
                 </div>
+                {% if detalles %}
                 <div id="div_carritoProductos" class="div_carritoProductos">
+                    {% for detalle in detalles %}
                     <div style="display: box;">
-                        <div id="div_p1" class="margenProductos cnt_producto_carrito">
+                        <div id="div_p{{ detalle.id }}" class="margenProductos cnt_producto_carrito">
                             <div class="datosProducto imagen_productoCarrito">
                                 <div>
-                                    <img id="img_producto10" style="border-radius: 20px;" class="imgHeigth" src="{% static './imagenes/TEC0350.webp'%}">
+                                    <img style="border-radius: 10px;" class="imgHeigth" src="{{ detalle.id_producto.imagen.url }}">
                                 </div>
                             </div>
                             <div class="datosProducto datos_productoCarrito">
-                                <h1 id="lbl_laboratorio" class="lbl_codigo">TECNOFARMA</h1>
-                                <span class="lbl_nombre">AMPITECNO 20 TAB 500 MG</span>
-                                <span class="lbl_sustancia_indice">AMPICILINA;</span>
-                                <span class="lbl_sustancia_indice">ANTIBIÓTICO</span>
+                                <h1 id="lbl_laboratorio" class="lbl_codigo">{{ detalle.id_producto.laboratorio }}</h1>
+                                <span class="lbl_nombre">{{ detalle.id_producto.nombre }}</span>
+                                <span class="lbl_sustancia_indice">{{ detalle.id_producto.sustancia }}</span>
+                                <span class="lbl_sustancia_indice">{{ detalle.id_producto.tipo }}</span>
                             </div>
                             <div class="datosProducto precios_productoCarrito">
                                 <div class="grupo1">
                                     <span class="lbl_precios_titulo">Precio</span>
                                 </div>
-                            <div class="grupo1">
-                                <span id="lbl_preUni1" class="lbl_preFin">$57.10</span>
+                                <div class="grupo1">
+                                    <span id="lbl_preUni{{ detalle.id }}" class="lbl_preFin">${{ detalle.id_producto.precio }}</span>
+                                </div>
+                                <div class="grupo1">
+                                    <span class="lbl_precios_titulo">Subtotal</span>
+                                </div>
+                                <div class="grupo1">
+                                    <span id="lbl_subTotal{{ detalle.id }}" class="lbl_subTotal">${{ detalle.subtotal }}</span>
+                                </div>
                             </div>
-                            <div class="grupo1">
-                                <span class="lbl_precios_titulo">Subtotal</span>
+                            <div class="datosProducto disponible_productoCarrito">
+                                <a class="icone-remove a_aumentarDisminuir" onclick="fnDisminuirCantidad(&#39;#tb_cantidad{{ detalle.id }}&#39;,&#39;#lbl_subTotal{{ detalle.id }}&#39;,&#39;#lbl_preFin{{ detalle.id }}&#39;,&#39;#lbl_codigo{{ detalle.id }}&#39;,&#39;#lbl_iva{{ detalle.id }}&#39;)"></a>
+                                <input name="tb_cantidad" style="margin: auto 5px;" type="text" id="tb_cantidad{{ detalle.id }}" class="tb_cantidadProductoCatalogo" value="{{ detalle.cantidad }}" onkeyup="fnCambiarCantidad(&#39;#tb_cantidad{{ detalle.id }}&#39;,&#39;#lbl_subTotal{{ detalle.id }}&#39;,&#39;#lbl_preFin{{ detalle.id }}&#39;,&#39;#lbl_codigo{{ detalle.id }}&#39;,&#39;#lbl_iva{{ detalle.id }}&#39;)">
+                                <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" onclick="fnAumentarCantidad(&#39;#tb_cantidad{{ detalle.id }}&#39;,&#39;#lbl_subTotal{{ detalle.id }}&#39;,&#39;#lbl_preFin{{ detalle.id }}&#39;,&#39;#lbl_codigo{{ detalle.id }}&#39;,&#39;#lbl_iva{{ detalle.id }}&#39;)"></a>
                             </div>
-                            <div class="grupo1">
-                                <span id="lbl_subTotal1" class="lbl_subTotal">$114.20</span>
+                            <div class="datosProducto botones_productoCarrito">
+                                <a id="a_borrar{{ detalle.id }}" title="Eliminar" class="icone-delete a_delete_sync" onclick="fnBorrarProducto('#lbl_codigo{{ detalle.id }}','#tb_cantidad{{ detalle.id }}','#lbl_subTotal{{ detalle.id }}','#lbl_iva{{ detalle.id }}',this)"></a>
                             </div>
-                        </div>
-                        <div class="datosProducto disponible_productoCarrito">
-                            <a class="icone-remove a_aumentarDisminuir" onclick="fnDisminuirCantidad(&#39;#tb_cantidad1&#39;,&#39;#lbl_subTotal1&#39;,&#39;#lbl_preFin1&#39;,&#39;#lbl_codigo1&#39;,&#39;#lbl_iva1&#39;)"></a>
-                            <input name="tb_cantidad" style="margin: auto 5px;" type="text" id="tb_cantidad1" class="tb_cantidadProductoCatalogo" value="2" onkeyup="fnCambiarCantidad(&#39;#tb_cantidad1&#39;,&#39;#lbl_subTotal1&#39;,&#39;#lbl_preFin1&#39;,&#39;#lbl_codigo1&#39;,&#39;#lbl_iva1&#39;)">
-                            <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" onclick="fnAumentarCantidad(&#39;#tb_cantidad1&#39;,&#39;#lbl_subTotal1&#39;,&#39;#lbl_preFin1&#39;,&#39;#lbl_codigo1&#39;,&#39;#lbl_iva1&#39;)"></a>
-                        </div>
-                        <div class="datosProducto botones_productoCarrito">
-                            <a id="a_borrar1" title="Eliminar" class="icone-delete a_delete_sync" onclick="fnBorrarProducto('#lbl_codigo1','#tb_cantidad1','#lbl_subTotal1','#lbl_iva1',this)"></a>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
+                {% else %}
+                <h1>No hay productos en el carrito.</h1>
+                {% endif %}
             </div>
             <div id="div_totales_carrito_append">
                 <div id="div_totalesCarrito" class="cnt_total_carrito"><div>
                     <span style="color: red;">Total:</span>
                 </div>
                 <div id="cnt_total_pedido_envio">
-                    <span id="sp_total" style="color: red;">114.20</span>
+                    <span id="sp_total" style="color: red;">${{ total }}</span>
                     <br>
                     <div>
                         <a class="boton2" onclick="fnEnviaPedido(1)" style="padding: 10px; font-size: 12px;">Generar pedido</a>
