@@ -38,7 +38,7 @@ if RENDER_EXTERNAL_HOSTNAME:
 INSTALLED_APPS = [
     'API',
     'rest_framework',
-    'sweetify', 
+    'sweetify',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

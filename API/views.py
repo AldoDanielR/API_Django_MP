@@ -9,6 +9,7 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView,FormView
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse_lazy
 from django.contrib import messages
+from sweetify import sweetify
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseBadRequest
@@ -20,7 +21,6 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.db.models import Count
-from sweetify import sweetify
 from .models import *
 from django.conf import settings
 import random
@@ -328,13 +328,16 @@ def agregar_al_carrito(request, producto_id):
     producto = get_object_or_404(Producto, id_producto=producto_id)
 
     if request.method == 'POST':
-        cantidad = int(request.POST.get('cantidad', 1))
+        cantidad = int(request.POST.get('cantidad'))
 
         if cantidad > producto.cantidad_stock:
-            sweetify.warning(request, f'No hay suficiente stock de {producto.nombre}. Solo hay {producto.cantidad_stock} en stock.')
-            return redirect('mederyfarma')
+            sweetify.warning(request, f'Piezas insuficientes de {producto.nombre}. Solo hay {producto.cantidad_stock} en stock.')
+            return redirect('carrito')
 
-        if cantidad > 0:
+        if cantidad <= 0:
+            sweetify.warning(request, title='Favor de revisar', text='Debe agregar por lo menos 1 pieza')
+            return redirect('mederyfarma')
+        else:
             carrito, created = Carrito.objects.get_or_create(id_usuario=request.user)
 
             detalle_carrito, created = Detalle_Carrito.objects.get_or_create(
@@ -344,9 +347,8 @@ def agregar_al_carrito(request, producto_id):
 
             detalle_carrito.cantidad += cantidad
             detalle_carrito.save()
-
-            sweetify.success(request, 'El producto ha sido añadido al carrito.')
-
+            
+            sweetify.success(request, 'Producto agregado al carrito')
             return redirect('carrito')
 
-    return HttpResponseBadRequest("Bad Request")
+    return render(request, "mederyfarma.html")

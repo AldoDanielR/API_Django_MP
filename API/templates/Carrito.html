@@ -18,19 +18,16 @@
 
         <script type="text/javascript" src="{% static './js/jquery-2.2.2.min.js'%}"></script>
         <script type="text/javascript" src="{% static './js/ventaLevic.js'%}"></script>
-        <script type="text/javascript" src="{% static './js/sweetalert.min.js'%}"></script>
+        <script type="text/javascript" src="{% static './js/sweetalert.js'%}"></script>
         <script type="text/javascript" src="{% static './js/main3.js'%}"></script>
 
         <script type="text/javascript" src="{% static './js/jquery.zoom.js'%}"></script>
         <script type="text/javascript" src="{% static './js/FuncionesSignalR.js'%}"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     
     <body style="height: 568px;">
-        <input type="hidden" name="ctl00$hf_ofertas" id="hf_ofertas">
-        <input type="hidden" name="ctl00$hf_nuevos_productos" id="hf_nuevos_productos">
-        <input type="hidden" name="ctl00$hf_generico" id="hf_generico">
-        <input type="hidden" name="ctl00$hf_patente" id="hf_patente">        
-
         <div id="div_contenedorEncabezado" class="cnt_encabezado_nuevo_diseno">
             <div class="cnt_encabezado_redes_datos">
                 <div class="cnt_encabezado_redes">
@@ -222,18 +219,21 @@
                             <span id="lbl_subTotal{{ producto.id_producto }}">$ 0.00</span>
                         </div>
                     </div>
-                    <div class="div_cantidadAgregarProductoCatalogo">
-                        <div class="div_cantidadAgregarProductoCatalogoDiv">
-                            <div class="div_cantidadProductoCatalogo">
-                                <a class="icone-remove a_aumentarDisminuir" style="cursor: pointer;" title="Dismunuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
-                                <input name="tb_cantidad" type="text" id="tb_cantidad{{ producto.id_producto }}" class="tb_cantidadProductoCatalogo" value="0" onkeyup="fnCambiarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')">
-                                <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                    <form method="post" action="{% url 'agregar_al_carrito' producto.id_producto %}">
+                        {% csrf_token %}
+                        <div class="div_cantidadAgregarProductoCatalogo">
+                            <div class="div_cantidadAgregarProductoCatalogoDiv">
+                                <div class="div_cantidadProductoCatalogo">
+                                    <a class="icone-remove a_aumentarDisminuir" style="cursor: pointer;" title="Dismunuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                                    <input name="cantidad" type="text" id="tb_cantidad{{ producto.id_producto }}" class="tb_cantidadProductoCatalogo" value="0" oninput="validarNumero(this)">
+                                    <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                                </div>
+                            </div>
+                            <div class="div_cantidadAgregarProductoCatalogoDiv">
+                                <button type="submit" id="a_agregar{{ producto.id_producto }}" class="btn_agregar_carrito_disponible" title="Agregar">AGREGAR</button>
                             </div>
                         </div>
-                        <div class="div_cantidadAgregarProductoCatalogoDiv">
-                            <a id="a_agregar{{ producto.id_producto }}" class="btn_agregar_carrito_disponible" title="Agregar" onclick="fnAgregarProducto('#lbl_codigo{{ producto.id_producto }}','#tb_cantidad{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','#lbl_iva{{ producto.id_producto }}',this)">AGREGAR</a>
-                        </div>
-                    </div>
+                    </form>
                     <div class="cnt_codigo_barras_tarjeta_producto">
                         <label>Código de Barras</label><br>
                         <label style="font-weight: bold;">{{ producto.id_producto }}</label>
@@ -243,11 +243,14 @@
             </div>
         </div>
 
-        <div id="piePagina" class="piePagina" style="width: 1349px;">
+        <div id="piePagina" class="piePagina">
             <div>
                 <span style="color: #DDD">© Copyright MederyFarma | Todos los derechos reservados</span>
             </div>
         </div>
+
+        {% load sweetify %}
+        {% sweetify %}
     
     </body>
 </html>

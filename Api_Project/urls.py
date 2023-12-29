@@ -28,7 +28,7 @@ urlpatterns = [
     path('Chart/', Chart.as_view(), name="chart"),
     path('Pago/', PagoMP.as_view(), name="pago"),
     path('MederyFarma/', MederyFarma.as_view(), name="mederyfarma"),
-    path('agregar_al_carrito/<int:producto_id>/', agregar_al_carrito, name='agregar_al_carrito'),
+    path('Producto/<int:producto_id>/', agregar_al_carrito, name="agregar_al_carrito"),
     path('Carrito/', Ver_Carrito.as_view(), name="carrito"),
     path('Detalle_Producto/<int:producto_id>/', Detalle_Producto.as_view(), name="detalle_producto"),
 ]

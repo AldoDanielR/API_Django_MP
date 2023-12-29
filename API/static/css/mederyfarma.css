@@ -87,6 +87,24 @@
     border-radius: 10px;
     padding: 20px;
     box-sizing: border-box;
+} 
+
+.icono_lupa {
+    width: 26px;
+    height: 26px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.iconos_botones {
+    width: 10px;
+    height: 10px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
 }
 
 @media (max-width: 600px) {

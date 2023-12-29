@@ -2533,3 +2533,11 @@ function fnMostrarDetalleProducto(codigo) {
     localStorage.removeItem("productosDetalleLevic");
 
 }
+
+function validarNumero(input) {
+    // Eliminar caracteres no numéricos
+    input.value = input.value.replace(/[^0-9]/g, '');
+    if (input.value === "") {
+        input.value = "0"; // Puedes ajustar el valor predeterminado según tus necesidades
+    }
+}

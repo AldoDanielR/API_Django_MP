@@ -551,10 +551,6 @@ nav {
 
 #div_contenedorEncabezado {
     background-color: var(--azulPrimario);
-    /*display: inline-flex;
-    width: 100%;
-    height: 48px;
-    padding: 10px 0px;*/
     position: fixed;
     z-index: 2;
 }
@@ -566,20 +562,6 @@ nav {
         flex-direction: column;
         text-align: center;*/
     }
-
-.div_contenedorEncabezado {
-    background: #003869;
-    background-image: -webkit-linear-gradient(top, #007CB7, #003869);
-    background-image: -moz-linear-gradient(top, #007CB7, #003869);
-    background-image: -o-linear-gradient(top, #007CB7, #003869);
-    background-image: linear-gradient(top, #007CB7, #003869);
-    display: inline-flex;
-    width: 100%;
-    height: 48px;
-    padding: 10px 0px;
-    position: fixed;
-    z-index: 2;
-}
 
 #img_logo {
     width: 60px;
@@ -1109,11 +1091,6 @@ nav {
         .piePagina div span {
             display: block;
         }
-
-.piePaginaFixed {
-    position: fixed;
-    bottom: 0px;
-}
 
 #Contenedor_pnl_pedidos {
     margin: 0px 1%;
@@ -2595,7 +2572,7 @@ nav {
 
 .cnt_precios_producto_detalle {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     align-items: center;
     padding: 10px 0px;
     border-top: 1px gray solid;
@@ -2649,6 +2626,7 @@ nav {
     transform: translateX(-50%);
     cursor: pointer;
     box-sizing: border-box;
+    border: none;
 }
 
 .cnt_codigo_barras_producto_detalle {
