@@ -97,16 +97,16 @@
                         <a class="btn_menu_cliente" href="#">Datos de cuenta</a>
                     </div>
                     <div>
-                        <a onclick="fnMostrarCarrito();" href="{% url 'carrito' %}">
+                        <a href="{% url 'carrito' %}">
                             <img id="Image7" src="{% static './imagenes/carritoazulmenu.png'%}">
                         </a>
-                        <a class="btn_menu_cliente" onclick="fnMostrarCarrito();" href="{% url 'carrito' %}">Carrito de compra</a>
+                        <a class="btn_menu_cliente" href="{% url 'carrito' %}">Carrito de compra</a>
                     </div>
                     <div>
-                        <a onclick="borrar_carrito_sr();">
+                        <a href="{% url 'borrar_carrito' %}">
                             <img id="Image8" src="{% static './imagenes/borrarcarrito.png'%}">
                         </a>
-                        <a onclick="borrar_carrito_sr();" class="btn_menu_cliente">Borrar carrito</a>
+                        <a class="btn_menu_cliente" href="{% url 'borrar_carrito' %}">Borrar carrito</a>
                     </div>
                     <div>
                         <a href="{% url 'logout' %}">
@@ -153,9 +153,9 @@
                             {% csrf_token %}
                             <div class="cnt_cantidad_producto_detalle">
                                 <div>
-                                    <a class="icone-remove a_aumentarDisminuir" style="cursor: pointer;" title="Dismunuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                                    <a class="iconos_botones_detalle" style="background-image: url({% static './imagenes/disminuir.ico' %})" title="Disminuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
                                     <input name="cantidad" type="text" id="tb_cantidad{{ producto.id_producto }}" class="tb_cantidadProductoCatalogo" value="0" oninput="validarNumero(this)">
-                                    <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                                    <a class="iconos_botones_detalle" style="background-image: url({% static './imagenes/aumentar.ico' %})" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
                                 </div>
                                 <button type="submit" id="btn_agregar_producto_detalle" class="btn_agregar_producto_detalle">AGREGAR</button>
                             </div>
@@ -208,9 +208,9 @@
                             <div class="div_cantidadAgregarProductoCatalogo">
                                 <div class="div_cantidadAgregarProductoCatalogoDiv">
                                     <div class="div_cantidadProductoCatalogo">
-                                        <a class="icone-remove a_aumentarDisminuir" style="cursor: pointer;" title="Dismunuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                                        <a class="iconos_botones" style="background-image: url({% static './imagenes/disminuir.ico' %})" title="Disminuir" onclick="fnDisminuirCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
                                         <input name="cantidad" type="text" id="tb_cantidad{{ producto.id_producto }}" class="tb_cantidadProductoCatalogo" value="0" oninput="validarNumero(this)">
-                                        <a class="icone-add a_aumentarDisminuir" style="cursor: pointer;" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
+                                        <a class="iconos_botones" style="background-image: url({% static './imagenes/aumentar.ico' %})" title="Aumentar" onclick="fnAumentarCantidad('#tb_cantidad{{ producto.id_producto }}','#lbl_subTotal{{ producto.id_producto }}','#lbl_preFin{{ producto.id_producto }}','')"></a>
                                     </div>
                                 </div>
                                 <div class="div_cantidadAgregarProductoCatalogoDiv">

@@ -323,7 +323,8 @@ class PagoMP(LoginRequiredMixin, ListView):
         preference = preference_response["response"]
 
         return render(request, self.template_name, {'PREFERENCE_ID': preference['id']})
-    
+
+@login_required
 def agregar_al_carrito(request, producto_id):
     producto = get_object_or_404(Producto, id_producto=producto_id)
 
@@ -352,3 +353,48 @@ def agregar_al_carrito(request, producto_id):
             return redirect('carrito')
 
     return render(request, "mederyfarma.html")
+
+@login_required
+def realizar_venta(request):
+    venta = Venta.objects.create(id_usuario=request.user)
+    detalles_carrito = Detalle_Carrito.objects.filter(id_carrito__id_usuario=request.user)
+
+    total = 0
+
+    for detalle_carrito in detalles_carrito:
+        cantidad = detalle_carrito.cantidad
+        subtotal = detalle_carrito.id_producto.precio * cantidad
+        total += subtotal
+
+        Detalle_Venta.objects.create(id_venta=venta, id_producto=detalle_carrito.id_producto, cantidad=cantidad)
+
+        detalle_carrito.id_producto.cantidad_stock -= cantidad
+        detalle_carrito.id_producto.save()
+
+        detalle_carrito.delete()
+
+    if request.method == 'POST':
+        ticket = Ticket.objects.create(id_venta=venta, total=total)
+        sweetify.success(request, f'Compra realizada con éxito por un total de: ${ticket.total}')
+        # Linea patra redirijir al detalle de la venta
+        # return redirect('detalle_venta', ticket_id=ticket.id_ticket)
+        
+        # Redirijir al inicio por mientras
+        return redirect('mederyfarma')
+
+    contexto = {
+        'detalles': detalles_carrito,
+        'total': total,
+    }
+
+    return render(request, "carrito.html", contexto)
+
+@login_required
+def borrar_carrito(request):
+    detalles_carrito = Detalle_Carrito.objects.filter(id_carrito__id_usuario=request.user)
+    
+    for detalle_carrito in detalles_carrito:
+        detalle_carrito.delete()
+        
+    sweetify.success(request, 'Carrito eliminado con éxito.')
+    return redirect('carrito')

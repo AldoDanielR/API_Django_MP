@@ -771,16 +771,6 @@ nav {
     margin: 4px 0px;
 }
 
-    .dropDownListFormulario[disabled] {
-        /*background-position: 150px;
-        border: 1px solid #0072ce;
-        border-radius: 10px;
-        text-indent: 0.01px; /*In Firefox*/
-        padding: 4px 8px;
-        text-align: center;
-        */
-    }
-
 .boton {
     background-color: var(--azulPrimario);
     border: none;
@@ -807,9 +797,11 @@ nav {
     padding: 7px 15px;
     text-align: center;
     margin-top: 10px;
+    width: 110px;
     border-radius: 10px;
     font-size: 10px;
     box-sizing: border-box;
+    border: none;
 }
 
     .boton2:active {
@@ -2899,4 +2891,40 @@ nav {
     right: 15px;
     font-weight: bold;
     color: var(--azulSecundario);
+}
+
+.iconos_botones {
+    width: 10px;
+    height: 10px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.iconos_botones_detalle {
+    width: 16px;
+    height: 16px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.iconos_botones_carrito {
+    width: 12px;
+    height: 12px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.icono_bote_basura {
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
 }
