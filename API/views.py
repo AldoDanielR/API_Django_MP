@@ -20,6 +20,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
+from django.db.models import F, ExpressionWrapper, DecimalField
 from django.db.models import Count
 from .models import *
 from django.conf import settings
@@ -226,6 +227,73 @@ class Ver_Carrito(LoginRequiredMixin, ListView):
 
         return render(request, self.template_name, contexto)
 
+class Mis_Compras(LoginRequiredMixin, ListView):
+    template_name="compras.html"
+    
+    def get(self, request):
+        usuario = request.user
+        username = request.user.username
+        
+        carrito, created = Carrito.objects.get_or_create(id_usuario=request.user)
+        detalles = Detalle_Carrito.objects.filter(id_carrito=carrito)
+
+        total = 0
+
+        for detalle in detalles:
+            subtotal = detalle.id_producto.precio * detalle.cantidad
+            detalle.subtotal = subtotal
+            detalle.save()
+            total += subtotal
+            
+        articulos = Detalle_Carrito.objects.filter(id_carrito=carrito).values('id_producto').distinct().count()
+        ventas = Venta.objects.filter(id_usuario=usuario).order_by('-fecha')
+        
+        context = {
+            'username': username,
+            'total': total,
+            'articulos': articulos,
+            'ventas': ventas
+        }
+        
+        
+        return render(request,self.template_name,context)
+    
+class Detalle_Compra(LoginRequiredMixin, ListView):
+    template_name = "detalle_compra.html"
+
+    def get(self, request, venta_id):
+        username = request.user.username
+        venta = Venta.objects.get(id_venta=venta_id)
+        detalles = Detalle_Venta.objects.filter(id_venta=venta)
+        
+        carrito, created = Carrito.objects.get_or_create(id_usuario=request.user)
+        detalles_carrito = Detalle_Carrito.objects.filter(id_carrito=carrito)
+
+        total = 0
+
+        for detalle_carrito in detalles_carrito:
+            subtotal = detalle_carrito.id_producto.precio * detalle_carrito.cantidad
+            detalle_carrito.subtotal = subtotal
+            detalle_carrito.save()
+            total += subtotal
+            
+        articulos = Detalle_Carrito.objects.filter(id_carrito=carrito).values('id_producto').distinct().count()
+        
+        detalles = detalles.annotate(subtotal=ExpressionWrapper(
+            F('cantidad') * F('id_producto__precio'),
+            output_field=DecimalField()
+        ))
+
+        context = {
+            'username': username,
+            'venta': venta,
+            'detalles': detalles,
+            'total': total,
+            'articulos': articulos,
+        }
+        
+        return render(request, self.template_name, context)
+
 class Chart(LoginRequiredMixin, ListView):
     template_name="chart.html"
     
@@ -355,7 +423,7 @@ def agregar_al_carrito(request, producto_id):
     return render(request, "mederyfarma.html")
 
 @login_required
-def realizar_venta(request):
+def realizar_compra(request):
     venta = Venta.objects.create(id_usuario=request.user)
     detalles_carrito = Detalle_Carrito.objects.filter(id_carrito__id_usuario=request.user)
 
@@ -376,11 +444,8 @@ def realizar_venta(request):
     if request.method == 'POST':
         ticket = Ticket.objects.create(id_venta=venta, total=total)
         sweetify.success(request, f'Compra realizada con éxito por un total de: ${ticket.total}')
-        # Linea patra redirijir al detalle de la venta
-        # return redirect('detalle_venta', ticket_id=ticket.id_ticket)
-        
-        # Redirijir al inicio por mientras
-        return redirect('mederyfarma')
+
+        return redirect('detalle_compra', venta_id=venta.id_venta)
 
     contexto = {
         'detalles': detalles_carrito,

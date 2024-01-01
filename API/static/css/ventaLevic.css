@@ -869,16 +869,9 @@ nav {
         text-align: center;
     }
 
-    .mGrid tr:hover, .mGrid2 tr:hover {
-        background: #0099CC;
-        cursor: pointer;
-        text-align: left;
-        color: white;
-    }
-
 
 .headGrid {
-    background-color: #00ce34;
+    background-color: var(--azulPrimario);
 }
 
 .row {
@@ -893,6 +886,18 @@ nav {
     margin: 0px;
     padding: 0px 40px;
     text-align: center;
+}
+
+.div_contenedor h1 {
+    color: var(--azulSecundario);
+    text-align: center;
+    font-size: 26px;
+}
+
+.div_contenedor h3 {
+    color: rgb(155, 158, 155);
+    text-align: center;
+    font-size: 22px;
 }
 
 .mensajeOferta2 {
@@ -2242,12 +2247,23 @@ nav {
 /*NUEVO DISEÑO *****************************************************************************************/
 
 .cnt_titulo_cuenta {
-    float: left;
+    display: flex;
+    align-items: center;
     width: 100%;
-    padding: 10px 20px 20px 20px;
+    padding: 20px;
     margin-bottom: 30px;
     border-bottom: 1px gray solid;
     box-sizing: border-box;
+}
+
+.cnt_titulo_cuenta img {
+    width: 130px;
+}
+
+.cnt_titulo_cuenta h1 {
+    margin-left: 20px;
+    font-weight: normal;
+    font-size: 32px;
 }
 
 .img_mono_cuenta {
@@ -2927,4 +2943,16 @@ nav {
     border: none;
     cursor: pointer;
     background-color: #fff;
+}
+
+.detalle-link {
+    padding: 7px 15px;
+    color: white;
+    background-color: var(--azulSecundario);
+    cursor: pointer;
+    box-sizing: border-box;
+    font-size: .9em;
+    border-radius: 50px;
+    border: none;
+    text-decoration: none;  /* Para quitar el subrayado del enlace */
 }

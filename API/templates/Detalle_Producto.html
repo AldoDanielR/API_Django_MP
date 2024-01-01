@@ -18,7 +18,6 @@
 
         <script type="text/javascript" src="{% static './js/jquery-2.2.2.min.js'%}"></script>
         <script type="text/javascript" src="{% static './js/ventaLevic.js'%}"></script>
-        <script type="text/javascript" src="{% static './js/sweetalert.js'%}"></script>
         <script type="text/javascript" src="{% static './js/main3.js'%}"></script>
 
         <script type="text/javascript" src="{% static './js/FuncionesSignalR.js'%}"></script>
@@ -91,10 +90,10 @@
                 </div>
                 <div class="cnt_modulos_menu">
                     <div>
-                        <a href="#">
-                            <img id="Image1" src="{% static './imagenes/usuariocuenta.png'%}">
+                        <a href="{% url 'mis_compras' %}">
+                            <img id="Image1" src="{% static './imagenes/mis_compras.jpg'%}">
                         </a>
-                        <a class="btn_menu_cliente" href="#">Datos de cuenta</a>
+                        <a class="btn_menu_cliente" href="{% url 'mis_compras' %}">Mis compras</a>
                     </div>
                     <div>
                         <a href="{% url 'carrito' %}">

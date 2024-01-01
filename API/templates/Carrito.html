@@ -18,12 +18,9 @@
 
         <script type="text/javascript" src="{% static './js/jquery-2.2.2.min.js'%}"></script>
         <script type="text/javascript" src="{% static './js/ventaLevic.js'%}"></script>
-        <script type="text/javascript" src="{% static './js/sweetalert.js'%}"></script>
         <script type="text/javascript" src="{% static './js/main3.js'%}"></script>
 
-        <script type="text/javascript" src="{% static './js/jquery.zoom.js'%}"></script>
         <script type="text/javascript" src="{% static './js/FuncionesSignalR.js'%}"></script>
-
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     
@@ -93,10 +90,10 @@
                 </div>
                 <div class="cnt_modulos_menu">
                     <div>
-                        <a href="#">
-                            <img id="Image1" src="{% static './imagenes/usuariocuenta.png'%}">
+                        <a href="{% url 'mis_compras' %}">
+                            <img id="Image1" src="{% static './imagenes/mis_compras.jpg'%}">
                         </a>
-                        <a class="btn_menu_cliente" href="#">Datos de cuenta</a>
+                        <a class="btn_menu_cliente" href="{% url 'mis_compras' %}">Mis compras</a>
                     </div>
                     <div>
                         <a href="{% url 'carrito' %}">
@@ -121,7 +118,7 @@
         </div>
 
         <div id="pagina">
-            <div id="principal" style="margin-top: 40px;">
+            <div id="principal" style="margin-top: 20px;">
                 <div class="cnt_carrito_titulo">
                     <img src="{% static './imagenes/carritoazul.png'%}">
                     <h1>Carrito de compra</h1>
@@ -181,12 +178,12 @@
                     <br>
                     <div>
                         {% if detalles %}
-                        <form method="POST" action="{% url 'realizar_venta' %}">
+                        <form method="POST" action="{% url 'realizar_compra' %}">
                             {% csrf_token %}
                             <button type="submit" class="boton2" style="padding: 10px; font-size: 12px;">Realizar compra</button>
                         </form>
                         {% else %}
-                        <form method="POST" action="{% url 'realizar_venta' %}">
+                        <form method="POST" action="{% url 'realizar_compra' %}">
                         </form>
                         {% endif %}
                     </div>
