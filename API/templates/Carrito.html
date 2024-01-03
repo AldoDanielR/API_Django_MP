@@ -22,6 +22,7 @@
 
         <script type="text/javascript" src="{% static './js/FuncionesSignalR.js'%}"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
     </head>
     
     <body style="height: 568px;">
@@ -176,15 +177,9 @@
                 <div id="cnt_total_pedido_envio">
                     <span id="sp_total" style="color: red;">${{ total }}</span>
                     <br>
-                    <div>
+                    <div style="margin-left: -80px;">
                         {% if detalles %}
-                        <form method="POST" action="{% url 'realizar_compra' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="boton2" style="padding: 10px; font-size: 12px;">Realizar compra</button>
-                        </form>
-                        {% else %}
-                        <form method="POST" action="{% url 'realizar_compra' %}">
-                        </form>
+                        <div id="checkout-btn"></div>
                         {% endif %}
                     </div>
                 </div>
@@ -256,6 +251,25 @@
 
         {% load sweetify %}
         {% sweetify %}
+
+        <script>
+            // Configura Mercado Pago con tu clave de prueba
+            const mp = new MercadoPago('TEST-ce88fee7-f01f-454c-ae27-481f8eef7c68', {
+                locale: 'es-MX'
+            });
+            const bricksBuilder = mp.bricks();
+        
+            bricksBuilder.create("wallet", "checkout-btn", {
+                initialization: {
+                    preferenceId: "{{ PREFERENCE_ID }}",
+                },
+                customization: {
+                    texts: {
+                        valueProp: 'smart_option',
+                    },
+                },
+            });
+        </script>
     
     </body>
 </html>

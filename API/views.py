@@ -22,6 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.db.models import F, ExpressionWrapper, DecimalField
 from django.db.models import Count
+from django.urls import reverse
 from .models import *
 from django.conf import settings
 import random
@@ -207,6 +208,7 @@ class Ver_Carrito(LoginRequiredMixin, ListView):
         detalles = Detalle_Carrito.objects.filter(id_carrito=carrito)
 
         total = 0
+        items = []
 
         for detalle in detalles:
             subtotal = detalle.id_producto.precio * detalle.cantidad
@@ -214,16 +216,51 @@ class Ver_Carrito(LoginRequiredMixin, ListView):
             detalle.save()
             total += subtotal
             
+            items.append({
+                "id": str(detalle.id_detalle_carrito),
+                "title": detalle.id_producto.nombre,
+                "quantity": detalle.cantidad,
+                "unit_price": float(detalle.id_producto.precio),
+                "currency_id": "MXN"
+            })
+            
         articulos = Detalle_Carrito.objects.filter(id_carrito=carrito).values('id_producto').distinct().count()
+        
+        mp = mercadopago.SDK("TEST-7365618180421079-112515-fe16b78fc4ecc2cbf8512550f39660f3-292126273")
 
-        contexto = {
-            'username': username,
-            'productos': productos_aleatorios,
-            'detalles': detalles,
-            'total': total,
-            'articulos': articulos,
-            'titulo': 'Carrito de Compras'
+        preference_data = {
+            "items": items,
+            "back_urls": {
+                "success": request.build_absolute_uri(reverse('realizar_compra')),
+                "failure": request.build_absolute_uri(reverse('carrito')),
+                "pending": request.build_absolute_uri(reverse('mederyfarma')),
+            },
+            "auto_return": "approved",
+            "external_reference": str(carrito.id_carrito),
         }
+
+        preference_response = mp.preference().create(preference_data)
+        preference = preference_response["response"]
+
+        if detalles.exists():
+            contexto = {
+                'username': username,
+                'productos': productos_aleatorios,
+                'detalles': detalles,
+                'total': total,
+                'articulos': articulos,
+                'titulo': 'Carrito de Compras',
+                'PREFERENCE_ID': preference['id']
+            }
+        else:
+            contexto = {
+                'username': username,
+                'productos': productos_aleatorios,
+                'detalles': detalles,
+                'total': total,
+                'articulos': articulos,
+                'titulo': 'Carrito de Compras',
+            }
 
         return render(request, self.template_name, contexto)
 
@@ -441,18 +478,10 @@ def realizar_compra(request):
 
         detalle_carrito.delete()
 
-    if request.method == 'POST':
-        ticket = Ticket.objects.create(id_venta=venta, total=total)
-        sweetify.success(request, f'Compra realizada con éxito por un total de: ${ticket.total}')
+    ticket = Ticket.objects.create(id_venta=venta, total=total)
+    sweetify.success(request, f'Compra realizada con éxito por un total de: ${ticket.total}')
 
-        return redirect('detalle_compra', venta_id=venta.id_venta)
-
-    contexto = {
-        'detalles': detalles_carrito,
-        'total': total,
-    }
-
-    return render(request, "carrito.html", contexto)
+    return redirect('detalle_compra', venta_id=venta.id_venta)
 
 @login_required
 def borrar_carrito(request):
