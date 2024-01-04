@@ -155,12 +155,12 @@
                                 </div>
                             </div>
                             <div class="datosProducto disponible_productoCarrito">
-                                <a class="iconos_botones_carrito" style="background-image: url({% static './imagenes/disminuir.ico' %})" title="Disminuir"></a>
+                                <a href="{% url 'disminuir_cantidad' id_detalle=detalle.id_detalle_carrito %}" class="iconos_botones_carrito" style="background-image: url({% static './imagenes/disminuir.ico' %})" title="Disminuir"></a>
                                 <input name="tb_cantidad" style="margin: auto 5px;" type="text" id="tb_cantidad{{ detalle.id }}" class="tb_cantidadProductoCatalogo" value="{{ detalle.cantidad }}" onkeyup="fnCambiarCantidad(&#39;#tb_cantidad{{ detalle.id }}&#39;,&#39;#lbl_subTotal{{ detalle.id }}&#39;,&#39;#lbl_preFin{{ detalle.id }}&#39;,&#39;#lbl_codigo{{ detalle.id }}&#39;,&#39;#lbl_iva{{ detalle.id }}&#39;)">
-                                <a class="iconos_botones_carrito" style="background-image: url({% static './imagenes/aumentar.ico' %})" title="Aumentar"></a>
+                                <a href="{% url 'aumentar_cantidad' id_detalle=detalle.id_detalle_carrito %}" class="iconos_botones_carrito" style="background-image: url({% static './imagenes/aumentar.ico' %})" title="Aumentar"></a>
                             </div>
                             <div class="datosProducto botones_productoCarrito">
-                                <a id="a_borrar{{ detalle.id }}" title="Eliminar" class="icono_bote_basura" style="background-image: url({% static './imagenes/bote_basura.png' %})"></a>
+                                <a href="{% url 'eliminar_producto' id_detalle=detalle.id_detalle_carrito %}" id="a_borrar{{ detalle.id }}" title="Eliminar" class="icono_bote_basura" style="background-image: url({% static './imagenes/bote_basura.png' %})"></a>
                             </div>
                         </div>
                     </div>
@@ -254,7 +254,7 @@
 
         <script>
             // Configura Mercado Pago con tu clave de prueba
-            const mp = new MercadoPago('TEST-ce88fee7-f01f-454c-ae27-481f8eef7c68', {
+            const mp = new MercadoPago('APP_USR-fad08dc4-80ce-4b7e-9cc9-0425b029ea32', {
                 locale: 'es-MX'
             });
             const bricksBuilder = mp.bricks();

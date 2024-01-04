@@ -205,7 +205,7 @@ class Ver_Carrito(LoginRequiredMixin, ListView):
         productos_aleatorios = random.sample(list(productos), min(4, len(productos)))
         
         carrito, created = Carrito.objects.get_or_create(id_usuario=request.user)
-        detalles = Detalle_Carrito.objects.filter(id_carrito=carrito)
+        detalles = Detalle_Carrito.objects.filter(id_carrito=carrito).order_by('id_detalle_carrito')
 
         total = 0
         items = []
@@ -226,7 +226,7 @@ class Ver_Carrito(LoginRequiredMixin, ListView):
             
         articulos = Detalle_Carrito.objects.filter(id_carrito=carrito).values('id_producto').distinct().count()
         
-        mp = mercadopago.SDK("TEST-7365618180421079-112515-fe16b78fc4ecc2cbf8512550f39660f3-292126273")
+        mp = mercadopago.SDK("APP_USR-7365618180421079-112515-ae2011dc2c3c35e29e0129628fcc313b-292126273")
 
         preference_data = {
             "items": items,
@@ -491,4 +491,33 @@ def borrar_carrito(request):
         detalle_carrito.delete()
         
     sweetify.success(request, 'Carrito eliminado con éxito.')
+    return redirect('carrito')
+
+@login_required
+def disminuir_cantidad(request, id_detalle):
+    detalle_carrito = get_object_or_404(Detalle_Carrito, id_detalle_carrito=id_detalle)
+
+    if detalle_carrito.cantidad == 1:
+        sweetify.warning(request, '¡Atención!', text='No puedes tener 0 piezas en tu carrito.')
+    elif detalle_carrito.cantidad > 1:
+        detalle_carrito.cantidad -= 1
+        detalle_carrito.save()
+        
+    return redirect('carrito')
+
+@login_required
+def aumentar_cantidad(request, id_detalle):
+    detalle_carrito = get_object_or_404(Detalle_Carrito, id_detalle_carrito=id_detalle)
+
+    detalle_carrito.cantidad += 1
+    detalle_carrito.save()
+
+    return redirect('carrito')
+
+@login_required
+def eliminar_producto(request, id_detalle):
+    detalle_carrito = get_object_or_404(Detalle_Carrito, id_detalle_carrito=id_detalle)
+    detalle_carrito.delete()
+
+    sweetify.success(request, 'Producto eliminado con éxito.')
     return redirect('carrito')

@@ -35,4 +35,7 @@ urlpatterns = [
     path('Detalle_Producto/<int:producto_id>/', Detalle_Producto.as_view(), name="detalle_producto"),
     path('Mis_Compras/', Mis_Compras.as_view(), name="mis_compras"),
     path('Detalle_Compra/<int:venta_id>/', Detalle_Compra.as_view(), name="detalle_compra"),
+    path('disminuir/<int:id_detalle>/', disminuir_cantidad, name='disminuir_cantidad'),
+    path('aumentar/<int:id_detalle>/', aumentar_cantidad, name='aumentar_cantidad'),
+    path('eliminar/<int:id_detalle>/', eliminar_producto, name='eliminar_producto'),
 ]

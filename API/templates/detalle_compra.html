@@ -147,8 +147,8 @@
                                                         <td>{{ venta.id_venta }}</td>
                                                         <td>{{ detalle.id_producto.nombre }}</td>
                                                         <td>{{ detalle.cantidad }}</td>
-                                                        <td>{{ detalle.id_producto.precio }}</td>
-                                                        <td>{{ detalle.subtotal }}</td>
+                                                        <td>${{ detalle.id_producto.precio }}</td>
+                                                        <td>${{ detalle.subtotal }}</td>
                                                     </tr>
                                                 {% endfor %}
                                             </tbody>
