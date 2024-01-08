@@ -282,104 +282,30 @@
             <div class="section__content section__content--p30">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="overview-wrap">
-                                <h2 class="title-1">overview</h2>
-                                <button class="au-btn au-btn-icon au-btn--blue">
-                                    <i class="zmdi zmdi-plus"></i>add item</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row m-t-25">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="overview-item overview-item--c1">
-                                <div class="overview__inner">
-                                    <div class="overview-box clearfix">
-                                        <div class="icon">
-                                            <i class="zmdi zmdi-account-o"></i>
-                                        </div>
-                                        <div class="text">
-                                            <h2>{{ clientes }}</h2>
-                                            <span>clientes registrados</span>
-                                        </div>
-                                    </div>
-                                    <div class="overview-chart">
-                                        <canvas id="widgetChart1"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="overview-item overview-item--c2">
-                                <div class="overview__inner">
-                                    <div class="overview-box clearfix">
-                                        <div class="icon">
-                                            <i class="zmdi zmdi-shopping-cart"></i>
-                                        </div>
-                                        <div class="text">
-                                            <h2>{{ piezas_vendidas }}</h2>
-                                            <span>piezas vendidas</span>
-                                        </div>
-                                    </div>
-                                    <div class="overview-chart">
-                                        <canvas id="widgetChart2"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="overview-item overview-item--c3">
-                                <div class="overview__inner">
-                                    <div class="overview-box clearfix">
-                                        <div class="icon">
-                                            <i class="zmdi zmdi-calendar-note"></i>
-                                        </div>
-                                        <div class="text">
-                                            <h2>{{ num_ventas }}</h2>
-                                            <span>ventas</span>
-                                        </div>
-                                    </div>
-                                    <div class="overview-chart">
-                                        <canvas id="widgetChart3"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="overview-item overview-item--c4">
-                                <div class="overview__inner">
-                                    <div class="overview-box clearfix">
-                                        <div class="icon">
-                                            <i class="zmdi zmdi-money"></i>
-                                        </div>
-                                        <div class="text">
-                                            <h2>${{ suma_total_tickets }}</h2>
-                                            <span>total ingresos</span>
-                                        </div>
-                                    </div>
-                                    <div class="overview-chart">
-                                        <canvas id="widgetChart4"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="au-card m-b-30">
-                                <div class="au-card-inner">
-                                    <h3 class="title-2 m-b-40">productos más vendidos</h3>
-                                    <canvas id="graficoTop5Productos"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="au-card m-b-30">
-                                <div class="au-card-inner">
-                                    <h3 class="title-2 m-b-40">días con mayor numero de ventas</h3>
-                                    <canvas id="graficoVentas" width="800" height="400"></canvas>
-                                </div>
-                            </div>
+                        <div class="col-lg-9">
+                            <h2 class="title-1 m-b-25">registros de compras de clientes</h2>
+                            <table class="table table-borderless table-striped table-earning">
+                                <thead>
+                                    <tr>
+                                        <th>id cliente</th>
+                                        <th>nombre</th>
+                                        <th>correo</th>
+                                        <th>fecha de registro</th>
+                                        <th>compras realizadas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cliente, ventas in ventas_por_cliente.items %}
+                                        <tr>
+                                            <td>{{ cliente.id }}</td>
+                                            <td>{{ cliente.username }}</td>
+                                            <td>{{ cliente.email }}</td>
+                                            <td>{{ cliente.date_joined }}</td>
+                                            <td>{{ ventas.count }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>                            
                         </div>
                     </div>
                     <div class="row">
@@ -395,64 +321,6 @@
         <!-- END MAIN CONTENT-->
     </div>
     <!-- END PAGE CONTAINER-->
-
-    <script>
-        var etiquetas = {{ etiquetas|safe }};
-        var datos = {{ datos|safe }};
-        var colores = ['rgba(253, 96, 12, 0.9)', 'rgba(103, 89, 222, 0.9)', 'rgba(36, 195, 133, 0.9)', 'rgba(241, 23, 104, 0.9)', 'rgba(140, 238, 39, 0.9)'];
-        var coloresBordes = ['rgba(253, 96, 12, 1)', 'rgba(103, 89, 222, 1)', 'rgba(36, 195, 133, 1)', 'rgba(241, 23, 104, 1)', 'rgba(140, 238, 39, 1)'];
-
-        var ctx = document.getElementById('graficoTop5Productos').getContext('2d');
-
-        var myChart = new Chart(ctx, {
-            type: 'polarArea',
-            data: {
-                labels: etiquetas,
-                datasets: [{
-                    label: 'Cantidad Vendida',
-                    data: datos,
-                    backgroundColor: colores,
-                    borderColor: coloresBordes,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        var labels = {{ labels|safe }};
-        var data = {{ data|safe }};
-
-        var colores = ['rgba(253, 96, 12, 0.9)', 'rgba(103, 89, 222, 0.9)', 'rgba(36, 195, 133, 0.9)', 'rgba(241, 23, 104, 0.9)', 'rgba(140, 238, 39, 0.9)'];
-        var coloresBordes = ['rgba(253, 96, 12, 1)', 'rgba(103, 89, 222, 1)', 'rgba(36, 195, 133, 1)', 'rgba(241, 23, 104, 1)', 'rgba(140, 238, 39, 1)'];
-
-        var ctx = document.getElementById('graficoVentas').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Número de Ventas',
-                    data: data,
-                    backgroundColor: colores,
-                    borderColor: coloresBordes,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
 
     <!-- Jquery JS-->
     <script src="{% static 'vendor/jquery-3.2.1.min.js'%}"></script>

@@ -12,7 +12,7 @@ from django.contrib import messages
 from sweetify import sweetify
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.http import HttpResponseBadRequest
+from django.db.models.functions import TruncDate
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -22,6 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.db.models import F, ExpressionWrapper, DecimalField
 from django.db.models import Count
+from django.db.models import Sum
 from django.urls import reverse
 from .models import *
 from django.conf import settings
@@ -113,6 +114,39 @@ class RegisterView(FormView):
 
 class Home(LoginRequiredMixin, ListView):
     template_name="index.html"
+    
+    def get(self, request):
+        username = request.user.username
+        usuarios_no_staff = User.objects.filter(is_staff=False)
+        clientes = usuarios_no_staff.count()
+        piezas_vendidas = Detalle_Venta.objects.aggregate(Sum('cantidad'))['cantidad__sum']
+        piezas_vendidas = piezas_vendidas if piezas_vendidas is not None else 0
+        num_ventas = Venta.objects.count()
+        suma_total_tickets = Ticket.objects.aggregate(Sum('total'))['total__sum']
+        suma_total_tickets = suma_total_tickets if suma_total_tickets is not None else 0
+        productos_mas_vendidos = Detalle_Venta.objects.values('id_producto__nombre').annotate(total_vendido=Sum('cantidad')).order_by('-total_vendido')[:5]
+        etiquetas = [producto['id_producto__nombre'] for producto in productos_mas_vendidos]
+        datos = [producto['total_vendido'] for producto in productos_mas_vendidos]
+        top_5_fechas_con_ventas = Venta.objects.annotate(fecha_trunc=TruncDate('fecha')).values('fecha_trunc').annotate(num_ventas=Count('id_venta')).order_by('-num_ventas')[:5]
+        labels = [result['fecha_trunc'].strftime('%Y-%m-%d') for result in top_5_fechas_con_ventas]
+        data = [result['num_ventas'] for result in top_5_fechas_con_ventas]
+        
+        context = {
+            'username': username,
+            'clientes': clientes,
+            'piezas_vendidas': piezas_vendidas,
+            'num_ventas': num_ventas,
+            'suma_total_tickets': suma_total_tickets,
+            'etiquetas': etiquetas,
+            'datos': datos,
+            'labels': labels,
+            'data': data,
+        }
+        
+        return render(request,self.template_name, context)
+    
+class PowerBi(LoginRequiredMixin, ListView):
+    template_name="encuesta_powerbi.html"
     
     def get(self, request):
         username = request.user.username
@@ -331,11 +365,24 @@ class Detalle_Compra(LoginRequiredMixin, ListView):
         
         return render(request, self.template_name, context)
 
-class Chart(LoginRequiredMixin, ListView):
-    template_name="chart.html"
+class Clientes(LoginRequiredMixin, ListView):
+    template_name="clientes.html"
     
     def get(self, request):
-        return render(request,self.template_name)
+        username = request.user.username
+        clientes = User.objects.filter(is_staff=False)  # Obtener todos los clientes que no son del staff
+        ventas_por_cliente = {}  # Diccionario para almacenar las ventas realizadas por cada cliente
+
+        for cliente in clientes:
+            ventas = Venta.objects.filter(id_usuario=cliente)
+            ventas_por_cliente[cliente] = ventas
+
+        context = {
+            'username': username,
+            'ventas_por_cliente': ventas_por_cliente,
+        }
+        
+        return render(request,self.template_name, context)
     
 class Graficas(LoginRequiredMixin, ListView):
     template_name="encuesta_chart.html"
@@ -343,91 +390,73 @@ class Graficas(LoginRequiredMixin, ListView):
         return render(request, self.template_name)
     
     def get(self, request):
-                pregunta1 = Encuesta.objects.values('frecuencia').annotate(total=Count('frecuencia'))
-                etiquetas1 = [dato['frecuencia'] for dato in pregunta1]
-                valores1 = [dato['total'] for dato in pregunta1]
+        username = request.user.username
 
-                pregunta2 = Encuesta.objects.values('c_navegacion').annotate(total=Count('c_navegacion'))
-                etiquetas2 = [dato['c_navegacion'] for dato in pregunta2]
-                valores2 = [dato['total'] for dato in pregunta2]
+        pregunta1 = Encuesta.objects.values('frecuencia').annotate(total=Count('frecuencia'))
+        etiquetas1 = [dato['frecuencia'] for dato in pregunta1]
+        valores1 = [dato['total'] for dato in pregunta1]
 
-                pregunta3 = Encuesta.objects.values('tipo_producto').annotate(total=Count('tipo_producto'))
-                etiquetas3 = [dato['tipo_producto'] for dato in pregunta3]
-                valores3 = [dato['total'] for dato in pregunta3]
+        pregunta2 = Encuesta.objects.values('c_navegacion').annotate(total=Count('c_navegacion'))
+        etiquetas2 = [dato['c_navegacion'] for dato in pregunta2]
+        valores2 = [dato['total'] for dato in pregunta2]
 
-                pregunta4 = Encuesta.objects.values('diseño').annotate(total=Count('diseño'))
-                etiquetas4 = [dato['diseño'] for dato in pregunta4]
-                valores4 = [dato['total'] for dato in pregunta4]
+        pregunta3 = Encuesta.objects.values('tipo_producto').annotate(total=Count('tipo_producto'))
+        etiquetas3 = [dato['tipo_producto'] for dato in pregunta3]
+        valores3 = [dato['total'] for dato in pregunta3]
 
-                pregunta5 = Encuesta.objects.values('colores').annotate(total=Count('colores'))
-                etiquetas5 = [dato['colores'] for dato in pregunta5]
-                valores5 = [dato['total'] for dato in pregunta5]
+        pregunta4 = Encuesta.objects.values('diseño').annotate(total=Count('diseño'))
+        etiquetas4 = [dato['diseño'] for dato in pregunta4]
+        valores4 = [dato['total'] for dato in pregunta4]
 
-                pregunta6 = Encuesta.objects.values('met_pago').annotate(total=Count('met_pago'))
-                etiquetas6 = [dato['met_pago'] for dato in pregunta6]
-                valores6 = [dato['total'] for dato in pregunta6]
+        pregunta5 = Encuesta.objects.values('colores').annotate(total=Count('colores'))
+        etiquetas5 = [dato['colores'] for dato in pregunta5]
+        valores5 = [dato['total'] for dato in pregunta5]
 
-                pregunta7 = Encuesta.objects.values('dispositivo').annotate(total=Count('dispositivo'))
-                etiquetas7 = [dato['dispositivo'] for dato in pregunta7]
-                valores7 = [dato['total'] for dato in pregunta7]
+        pregunta6 = Encuesta.objects.values('met_pago').annotate(total=Count('met_pago'))
+        etiquetas6 = [dato['met_pago'] for dato in pregunta6]
+        valores6 = [dato['total'] for dato in pregunta6]
 
-                pregunta8 = Encuesta.objects.values('not_correo').annotate(total=Count('not_correo'))
-                etiquetas8 = [dato['not_correo'] for dato in pregunta8]
-                valores8 = [dato['total'] for dato in pregunta8]
+        pregunta7 = Encuesta.objects.values('dispositivo').annotate(total=Count('dispositivo'))
+        etiquetas7 = [dato['dispositivo'] for dato in pregunta7]
+        valores7 = [dato['total'] for dato in pregunta7]
 
-                pregunta9 = Encuesta.objects.values('factores').annotate(total=Count('factores'))
-                etiquetas9 = [dato['factores'] for dato in pregunta9]
-                valores9 = [dato['total'] for dato in pregunta9]
+        pregunta8 = Encuesta.objects.values('not_correo').annotate(total=Count('not_correo'))
+        etiquetas8 = [dato['not_correo'] for dato in pregunta8]
+        valores8 = [dato['total'] for dato in pregunta8]
+
+        pregunta9 = Encuesta.objects.values('factores').annotate(total=Count('factores'))
+        etiquetas9 = [dato['factores'] for dato in pregunta9]
+        valores9 = [dato['total'] for dato in pregunta9]
                 
-                pregunta10 = Encuesta.objects.values('sug_mejoras').annotate(total=Count('sug_mejoras'))
-                etiquetas10 = [dato['sug_mejoras'] for dato in pregunta10]
-                valores10 = [dato['total'] for dato in pregunta10]
-
-                return render(request, self.template_name,  {
-                    'etiquetas1': etiquetas1,
-                    'valores1': valores1,
-                    'etiquetas2': etiquetas2,
-                    'valores2': valores2,
-                    'etiquetas3': etiquetas3,
-                    'valores3': valores3,
-                    'etiquetas4': etiquetas4,
-                    'valores4': valores4,
-                    'etiquetas5': etiquetas5,
-                    'valores5': valores5,
-                    'etiquetas6': etiquetas6,
-                    'valores6': valores6,
-                    'etiquetas7': etiquetas7,
-                    'valores7': valores7,
-                    'etiquetas8': etiquetas8,
-                    'valores8': valores8,
-                    'etiquetas9': etiquetas9,
-                    'valores9': valores9,
-                    'etiquetas10': etiquetas10,
-                    'valores10': valores10,
-                })
-
-class PagoMP(LoginRequiredMixin, ListView):
-    template_name="pago.html"
-    
-    def get(self, request):
-        mp = mercadopago.SDK("APP_USR-7365618180421079-112515-ae2011dc2c3c35e29e0129628fcc313b-292126273")
-
-        preference_data = {
-            "items": [
-                {
-                    "id": "0001",
-                    "title": "Tempra Gotas",
-                    "quantity": 1,
-                    "unit_price": 20,
-                    "currency_id": "MXN"
-                }
-            ]
+        pregunta10 = Encuesta.objects.values('sug_mejoras').annotate(total=Count('sug_mejoras'))
+        etiquetas10 = [dato['sug_mejoras'] for dato in pregunta10]
+        valores10 = [dato['total'] for dato in pregunta10]
+        
+        context = {
+            'username': username,
+            'etiquetas1': etiquetas1,
+            'valores1': valores1,
+            'etiquetas2': etiquetas2,
+            'valores2': valores2,
+            'etiquetas3': etiquetas3,
+            'valores3': valores3,
+            'etiquetas4': etiquetas4,
+            'valores4': valores4,
+            'etiquetas5': etiquetas5,
+            'valores5': valores5,
+            'etiquetas6': etiquetas6,
+            'valores6': valores6,
+            'etiquetas7': etiquetas7,
+            'valores7': valores7,
+            'etiquetas8': etiquetas8,
+            'valores8': valores8,
+            'etiquetas9': etiquetas9,
+            'valores9': valores9,
+            'etiquetas10': etiquetas10,
+            'valores10': valores10,
         }
-
-        preference_response = mp.preference().create(preference_data)
-        preference = preference_response["response"]
-
-        return render(request, self.template_name, {'PREFERENCE_ID': preference['id']})
+        
+        return render(request, self.template_name, context)
 
 @login_required
 def agregar_al_carrito(request, producto_id):
